@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-#define _CRT_SECURE_NO_WARNINGS = 3
-#define LEN sizeof(struct student)
 
 struct student {
     int num;
@@ -11,58 +9,77 @@ struct student {
     struct student* next;
 };
 
-int main()
-{
-    
-    // putchar(getchar());  // getcharº¯ÊýÖ»ÄÜ½ÓÊÕÒ»¸ö×Ö·û
+#define LEN sizeof(struct student)
 
-    /* printf() 
-        
+int main() {
+    
+    // putchar(getchar());  // getcharå‡½æ•°åªèƒ½æŽ¥æ”¶ä¸€ä¸ªå­—ç¬¦
+
+    /* printf()
+
         %      d
         ^      ^
-     ¸ñÊ½ÉùÃ÷ ¸ñÊ½×Ö·û
+     æ ¼å¼å£°æ˜Ž æ ¼å¼å­—ç¬¦
 
-        %m.nf Ö¸¶¨Êä³öµÄÊµÊôÕ¼mÁÐ,¹«ÓÐnÎ»Ð¡Êý,ÆäÖÐm±ØÐë>n
+        %m.nf æŒ‡å®šè¾“å‡ºçš„å®žå±žå måˆ—,å…¬æœ‰nä½å°æ•°,å…¶ä¸­må¿…é¡»>n
 
-        %d,i: ÒÔ´ø·ûºÅµÄÊ®½øÖÆÐÎÊ½Êä³öÕûÊý
-        %o: ÒÔ°Ë½øÖÆÎÞ·ûºÅÐÎÊ½Êä³öÕûÊý
-        %x,X: ÒÔÊ®Áù½øÖÆÎÞ·ûºÅÐÎÊ½Êä³öÕûÊý
-        %u: ÒÔÎÞ·ûºÅÐÎÊ½Êä³öÕûÊý
-        %c: ÒÔ×Ö·û´®ÐÎÊ½Êä³ö,Ö»Êä³öÒ»¸ö×Ö·û
-        %s: Êä³ö×Ö·û´®
-        %f: ÒÔÐ¡ÊýÐÎÊ½Êä³öµ¥£¬Ë«¾«¶ÈÊý,Òþº¬Êä³öÁùÎ»Ð¡Êý
-        %e,E: ÒÔÖ¸ÊýÐÎÊ½Êä³ö
-        %l: ÓÃÓÚ³¤ÕûÐÍÊý¾Ý(%ld, %lo, %lx, %lu)ÒÔ¼°doubleÐÍÊý¾Ý
+        %d,i: ä»¥å¸¦ç¬¦å·çš„åè¿›åˆ¶å½¢å¼è¾“å‡ºæ•´æ•°
+        %o: ä»¥å…«è¿›åˆ¶æ— ç¬¦å·å½¢å¼è¾“å‡ºæ•´æ•°
+        %x,X: ä»¥åå…­è¿›åˆ¶æ— ç¬¦å·å½¢å¼è¾“å‡ºæ•´æ•°
+        %u: ä»¥æ— ç¬¦å·å½¢å¼è¾“å‡ºæ•´æ•°
+        %c: ä»¥å­—ç¬¦ä¸²å½¢å¼è¾“å‡º,åªè¾“å‡ºä¸€ä¸ªå­—ç¬¦
+        %s: è¾“å‡ºå­—ç¬¦ä¸²
+        %f: ä»¥å°æ•°å½¢å¼è¾“å‡ºå•ï¼ŒåŒç²¾åº¦æ•°,éšå«è¾“å‡ºå…­ä½å°æ•°
+        %e,E: ä»¥æŒ‡æ•°å½¢å¼è¾“å‡º
+        %l: ç”¨äºŽé•¿æ•´åž‹æ•°æ®(%ld, %lo, %lx, %lu)ä»¥åŠdoubleåž‹æ•°æ®
 
-        scanf("%d, %d", &a, &b)  # ÔÚÊäÈëÊý¾ÝÊ±Ò²Ó¦¸Ã±£³ÖÐÎÊ½  '1, 2'
+        scanf("%d, %d", &a, &b)  # åœ¨è¾“å…¥æ•°æ®æ—¶ä¹Ÿåº”è¯¥ä¿æŒå½¢å¼  '1, 2'
                   ^       ^
-               ¸ñÊ½¿ØÖÆ  ±äÁ¿ÁÐ±í
+               æ ¼å¼æŽ§åˆ¶  å˜é‡åˆ—è¡¨
 
-        getchar() + 32,±ä³É´óÐ´
+        getchar() + 32,å˜æˆå¤§å†™
 
     */
 
-    struct student* head, * p;
+    struct student* head, * p, * temp;
 
-    head = p = (struct student*)malloc(LEN);
+    head = (struct student*)malloc(LEN);
+    if (head == NULL) {
+        perror("Memory allocation failed for head");
+        return 1;
+    }
 
-    scanf("%d,%f", &p->num, &p->score);
+    printf("è¯·è¾“å…¥æ•°é‡å’Œåˆ†æ•°\n");
 
-    p = (struct student*) malloc(LEN);
+    scanf("%d %f", &head->num, &head->score);
 
-    scanf("%d,%f", &p->num, &p->score);
+    p = (struct student*)malloc(LEN);
+    if (p == NULL) {
+        perror("Memory allocation failed for second node");
+        free(head);
+        return 1;
+    }
 
-    head->next = p;
+    printf("è¯·è¾“å…¥æ•°é‡å’Œåˆ†æ•°\n");
 
-    p->next = NULL;
+    scanf("%d %f", &p->num, &p->score);
 
-    p = head;
+    p->next = NULL; // Initialize the next pointer of the second node to NULL
+    head->next = p; // Link the first node to the second node
 
-    printf("\n½Úµã 1:%d,%6.2f\n", p->num, p->score);
+    temp = head; // Use a temporary pointer to traverse the list
 
-    p = p->next;
+    printf("\nèŠ‚ç‚¹ 1:%d,%6.2f\n", temp->num, temp->score);
 
-    printf("½áµã 2:%d,%6.2f\n", p->num, p->score);
-    
+    temp = temp->next; // Move to the next node
+
+    printf("èŠ‚ç‚¹ 2:%d,%6.2f\n", temp->num, temp->score);
+
+    // Don't forget to free the allocated memory  
+    free(head->next);
+    free(head);
+
+
+
     return 0;
 }
