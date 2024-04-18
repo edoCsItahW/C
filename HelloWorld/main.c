@@ -1,45 +1,52 @@
-/* ±äÁ¿ÀàÐÍ */
+// Copyright (c) 2024. All rights reserved.
+// This source code is licensed under the CC BY-NC-SA
+// (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+// This software is protected by copyright law. Reproduction, distribution, or use for commercial
+// purposes is prohibited without the author's permission. If you have any questions or require
+// permission, please contact the author: 2207150234@st.sziit.edu.cn
+
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 #include <stdio.h>
 //#include <math.h>
-//extern int a;  ÉùÃ÷ÆäËüÎÄ¼þÖÐµÄ±äÁ¿
+//extern int a;  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ÐµÄ±ï¿½ï¿½ï¿½
 #include <windows.h>
 
 /*
-±äÁ¿ÀàÐÍ->Ã¶¾ÙÀàÐÍ
-			 ->voidÀàÐÍ
-			 ->ÅÉÉúÀàÐÍ
-			 ->»ù±¾Êý¾ÝÀàÐÍ->int ÕûÊýÀàÐÍ
-									-> char ×Ö·ûÀàÐÍ
-									-> float ¸¡µãÀàÐÍ
-									-> double Ë«¾«¶È¸¡µãÀàÐÍ			
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½->Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			 ->voidï¿½ï¿½ï¿½ï¿½
+			 ->ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			 ->ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½->int ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									-> char ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
+									-> float ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									-> double Ë«ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½			
 */
 
-// char ×Ö·ûÊý¾ÝÀàÐÍ
-// short ¶ÌÕûÐÍ
-// int ÕûÐÍ
-// long ³¤ÕûÐÍ
-// long long ¸ü³¤µÄÕûÐÍ
-// float µ¥¾«¶È¸¡µãÊý
-// double Ë«¾«¶È¸¡µãÊý
+// char ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// short ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// int ï¿½ï¿½ï¿½ï¿½
+// long ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// long long ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// float ï¿½ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½
+// double Ë«ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½
 
 /*
 int main()
 {	
-	printf("¸÷ÀàÐÍËùÕ¼×Ö½Ú\n");
+	printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½Ö½ï¿½\n");
 
-	printf("charµÄ³¤¶È:%zu\n", sizeof(char));
+	printf("charï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(char));
 
-	printf("shortµÄ³¤¶È:%zu\n", sizeof(short));
+	printf("shortï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(short));
 
-	printf("intµÄ³¤¶È:%zu\n", sizeof(int));
+	printf("intï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(int));
 
-	printf("longµÄ³¤¶È:%zu\n", sizeof(long));
+	printf("longï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(long));
 
-	printf("long longµÄ³¤¶È:%zu\n", sizeof(long long));
+	printf("long longï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(long long));
 
-	printf("floatµÄ³¤¶È:%zu\n", sizeof(float));
+	printf("floatï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(float));
 
-	printf("doubleµÄ³¤¶È:%zu\n", sizeof(double));
+	printf("doubleï¿½Ä³ï¿½ï¿½ï¿½:%zu\n", sizeof(double));
 
 	return 0;
 }
@@ -52,13 +59,13 @@ int main()
 
 	switch (num){
 		case < 0:
-			printf("Ð¡ÓÚ0");
+			printf("Ð¡ï¿½ï¿½0");
 			break;
 		case 0 <= num < 1:
-			printf("0ÖÁ1Ö®¼ä");
+			printf("0ï¿½ï¿½1Ö®ï¿½ï¿½");
 			break;
 		default:
-			printf("´óÓÚ1");
+			printf("ï¿½ï¿½ï¿½ï¿½1");
 	}
 
 	return 0;
@@ -71,21 +78,21 @@ int BMI(int height);
 int main() {
 	int a;
 
-	printf("ÊäÈëÄãµÄÌåÖØ:\n");
+	printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:\n");
 
 	scanf_s("%d", &a);
 
-	printf("aµÄÆ½·½:%d\n", BMI(a));
+	printf("aï¿½ï¿½Æ½ï¿½ï¿½:%d\n", BMI(a));
 
 	if (a < 0) {
-		printf("ÌåÖØÐ¡ÓÚ0");
+		printf("ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½0");
 	}
 	else if (0 <= a < 10) {
-		printf("ÌåÖØÔÚ0ÖÁ10Ö®¼ä");
+		printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½10Ö®ï¿½ï¿½");
 	}
 	else {
 
-		printf("ÌåÖØ´óÓÚ10");
+		printf("ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½10");
 
 	}
 
@@ -101,21 +108,21 @@ int BMI(int height) {
 
 //int main() {
 //    int year;
-//    printf("ÇëÊäÈëÒ»¸öÄê·Ý:\n");
-//    scanf_s("%d", &year);  // ¸³ÖµÊäÈë
+//    printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½:\n");
+//    scanf_s("%d", &year);  // ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 //    
-//    // ¶¨Òå×Öµä´æ´¢Ã¿¸öÓàÊý¶ÔÓ¦µÄÉúÐ¤Ãû³Æ
+//    // ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½æ´¢Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ð¤ï¿½ï¿½ï¿½ï¿½
 //    const char* zodiacs[] = {
-//        "ºï", "¼¦", "¹·", "Öí", "Êó", "Å£", 
-//		"»¢", "ÍÃ", "Áú", "Éß", "Âí", "Ñò",
+//        "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "Å£", 
+//		"ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½",
 //    };
 //    
-//    // ¼ÆËãÓàÊý²¢¸ù¾ÝÓàÊýË÷Òý×Öµä»ñÈ¡ÉúÐ¤Ãû³Æ
+//    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½È¡ï¿½ï¿½Ð¤ï¿½ï¿½ï¿½ï¿½
 //    int remainder = year % 12;
 //    if (remainder >= 0 && remainder < 12) {
 //        printf("%s", zodiacs[remainder]);
 //    } else {
-//        printf("·Ç·¨ÊäÈë%d", year);
+//        printf("ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½%d", year);
 //    }
 //    
 //    return 0;
@@ -128,14 +135,14 @@ int main() {
 
 	while (a % 10 != 0) {
 		
-		printf("ÉÁË¸\n");
+		printf("ï¿½ï¿½Ë¸\n");
 		Sleep(500);
 
 		a++;
 
 	}
 
-	printf("µÈ´ý\n");
+	printf("ï¿½È´ï¿½\n");
 	Sleep(1000);
 	
 	return 1;

@@ -5,4 +5,11 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-#include <stdio.h>
+//
+// Created by Lenovo on 24-4-18.
+//
+
+#ifndef BASE_H
+#define BASE_H
+
+#endif //BASE_H

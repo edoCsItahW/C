@@ -5,24 +5,21 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-#include <stdio.h>
-#include <stdlib.h>
+// !/user/bin/C
 
+/* -------------------------<Lenovo>----------------------------
+ * 传建时间: 24-4-18 上午8:46
+ * 当前项目名: C
+ * 编码模式: utf-8
+ * 注释: 
+ * ------------------------<Lenovo>---------------------------- */
+
+//
+// Created by Lenovo on 24-4-18.
+//
+#include <stdio.h>
 
 int main()
 {
-	int var = 20;   /* ʵ�ʱ��������� */
-	int *ip;        /* ָ����������� */
 
-	ip = &var;  /* ��ָ������д洢 var �ĵ�ַ */
-
-	printf("var �����ĵ�ַ: %p\n", &var);
-
-	/* ��ָ������д洢�ĵ�ַ */
-	printf("ip �����洢�ĵ�ַ: %p\n", ip);
-
-	/* ʹ��ָ�����ֵ */
-	printf("*ip ������ֵ: %d\n", *ip);
-
-	return 0;
 }
