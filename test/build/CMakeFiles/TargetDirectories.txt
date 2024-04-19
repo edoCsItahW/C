@@ -1,0 +1,3 @@
+D:/xst_project_202212/codeSet/C/test/build/CMakeFiles/linkedList.dir
+D:/xst_project_202212/codeSet/C/test/build/CMakeFiles/ALL_BUILD.dir
+D:/xst_project_202212/codeSet/C/test/build/CMakeFiles/ZERO_CHECK.dir

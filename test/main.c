@@ -203,8 +203,3 @@ void pointer()
 
 	printf("%d\n", *&num);
 }
-
-void structPointer()
-{
-
-}
