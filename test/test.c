@@ -5,11 +5,28 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
+// !/user/bin/C
+
+// -------------------------<Lenovo>----------------------------
+// 传建时间: 24-4-19 下午4:24
+// 当前项目名: C
+// 编码模式: utf-8
+// 注释: 
+// ------------------------<Lenovo>----------------------------
+
+
 //
-// Created by Lenovo on 24-4-18.
+// Created by Lenovo on 24-4-19.
 //
 
-#ifndef BASE_H
-#define BASE_H
+#include <stdio.h>
+#define MAXSIZE 100
 
-#endif //BASE_H
+typedef struct {
+	int * elem;
+	int length;
+} SqList;
+
+char * IniList(SqList L) {
+
+}
