@@ -6,14 +6,16 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 // -------------------------<edocsitahw>----------------------------
-// 传建时间: 2024/05/08 下午8:44
+// 传建时间: 2024/05/08 下午8:40
 // 当前项目名: test
 // 编码模式: utf-8
 // 注释:
 // -------------------------<edocsitahw>----------------------------
-<stdio.h>
+#include <stdio.h>
 
-	int main
-{
-	return 0;
-}
+struct arr {
+	int len;
+
+	int data[];
+
+};
