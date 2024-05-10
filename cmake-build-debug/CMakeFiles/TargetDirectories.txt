@@ -1,3 +1,0 @@
-E:/codeSpace/codeSet/C/cmake-build-debug/CMakeFiles/test.dir
-E:/codeSpace/codeSet/C/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/codeSpace/codeSet/C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
