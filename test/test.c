@@ -11,9 +11,21 @@
 // 编码模式: utf-8
 // 注释:
 // -------------------------<edocsitahw>----------------------------
-<stdio.h>
+#include <stdio.h>
+#include "confunc.h"
+#include <stdarg.h>
 
-	int main
-{
+void partal(int _n) {
+	printf("%d\n", _n);
+}
+
+int main() {
+
+	int array[10] = {1, 2, 3, 4, 5};
+
+	Array arr = createArray(array, 10);
+
+	map(partal, arr);
+
 	return 0;
 }

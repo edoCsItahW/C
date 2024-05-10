@@ -1,21 +1,16 @@
-cmake_minimum_required(VERSION 3.29)
-#项目名字
+cmake_minimum_required(VERSION 3.15)
 project(test)
-#设置编译版本
 
+# 添加Python头文件的包含路径
+include_directories("E:/ProgramFiles/Anaconda/include")
 
-set(SOURCE_FILES
-        ./test.c)
+# 其他CMake配置...
 
+add_executable(test ./test/test.c
+        test/cpp/test.cpp
+        test/practice.c
+        test/confunc.h)
 
-set(ZLIB_INCLUDE E:/ProgramFiles/Anaconda/include)
-
-# 设置项目输出
-set(EXECUTABLE_OUTPUT_PATH .)
-# 链接外部库
-include_directories(${ZLIB_INCLUDE})
-
-# 设置编译文件
-add_executable(test ./test.c)
-#将第三方库链接在一起
-target_link_libraries (${PROJECT_NAME} Python.h)
+# 如果你还需要链接到Python库（比如嵌入Python解释器），你可能还需要添加link_directories()和target_link_libraries()
+# link_directories("E:/ProgramFiles/Anaconda/libs")  # 注意：通常不建议使用link_directories，因为它可能导致链接器搜索路径的混乱
+target_link_libraries(test "E:/ProgramFiles/Anaconda/libs/python311.lib")  # 替换XY为你的Python版本号

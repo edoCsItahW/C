@@ -13,9 +13,24 @@
 // -------------------------<edocsitahw>----------------------------
 #include <stdio.h>
 
-struct arr {
+/* C语言中无法直接将数组作为函数参数传递，而int data[]也不能作为结构体的成员。
+ *
+ * */
+typedef struct arr {
 	int len;
+	int *data;
+} Array;
 
-	int data[];
+typedef void (*CallbackFunc)(int);
 
-};
+Array createArray(int arr[], int len) {
+	Array a = {len, arr};
+	return a;
+}
+
+Array map(CallbackFunc f, Array a) {
+	for (int i = 0; i < a.len; i++) {
+		f(a.data[i]);
+	}
+	return a;
+}
