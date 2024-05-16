@@ -6,26 +6,22 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 // -------------------------<edocsitahw>----------------------------
-// ä¼ å»ºæ—¶é—´: 2024/05/08 ä¸‹åˆ8:44
-// å½“å‰é¡¹ç›®å: test
-// ç¼–ç æ¨¡å¼: utf-8
-// æ³¨é‡Š:
+// ´«½¨Ê±¼ä: 2024/05/08 ÏÂÎç8:44
+// µ±Ç°ÏîÄ¿Ãû: test
+// ±àÂëÄ£Ê½: utf-8
+// ×¢ÊÍ:
 // -------------------------<edocsitahw>----------------------------
-#include <stdio.h>
-#include "confunc.h"
-#include <stdarg.h>
+#include "libType.h"
 
-void partal(int _n) {
-	printf("%d\n", _n);
-}
 
 int main() {
 
-	int array[10] = {1, 2, 3, 4, 5};
+	int l[] = {1, 2, 3, 4, 5};
 
-	Array arr = createArray(array, 10);
+	ListInt list = List.createIntList(5, l);
 
-	map(partal, arr);
+	list.method.print(list.arr);
 
 	return 0;
 }
+

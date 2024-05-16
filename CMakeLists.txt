@@ -6,10 +6,8 @@ include_directories("E:/ProgramFiles/Anaconda/include")
 
 # 其他CMake配置...
 
-add_executable(test ./test/test.c
-        test/cpp/test.cpp
-        test/practice.c
-        test/confunc.h)
+add_executable(test ./test/practice.c
+        test/libType.h)
 
 # 如果你还需要链接到Python库（比如嵌入Python解释器），你可能还需要添加link_directories()和target_link_libraries()
 # link_directories("E:/ProgramFiles/Anaconda/libs")  # 注意：通常不建议使用link_directories，因为它可能导致链接器搜索路径的混乱
