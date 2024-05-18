@@ -11,16 +11,24 @@
 // ±àÂëÄ£Ê½: utf-8
 // ×¢ÊÍ:
 // -------------------------<edocsitahw>----------------------------
-#include "libType.h"
+#include <stdio.h>
+#include "arrlib.h"
+//#include "dictlib.h"
 
 
 int main() {
 
-	int l[] = {1, 2, 3, 4, 5};
+	char *k[] = {"hello", "world", "c", "language", "is", "awesome"};
 
-	ListInt list = List.createIntList(5, l);
+	Array keys = convertString(k, 5);
 
-	list.method.print(list.arr);
+	int value[] = {1, 2, 3, 4, 5};
+
+	Array values = convertInt(value, 5);
+
+//	Dict dict = createDict(&keys, &values);
+
+	Arr.print(keys);
 
 	return 0;
 }

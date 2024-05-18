@@ -18,6 +18,14 @@
 #define INT_SIZE sizeof(int)
 #define STR_SIZE sizeof(char*)
 
+/* +---------+  +---------------+  +---------+  +---------------+
+ * | listInt |  | listIntMethod |  | listStr |  | listStrMethod |
+ * +---------+  +---------------+  +---------+  +---------------+
+ * +----------------------------+  +----------------------------+
+ * |           ListInt          |  |            ListStr         |
+ * +----------------------------+  +----------------------------+
+ * */
+
 // *********** 定义函数 ***********
 
 /** 检查内存是否分配成功。
@@ -39,6 +47,14 @@ int checkMemoryStr(const char** str) {
 	if (str == NULL) {
 		perror("Memory allocation failed!");
 		return 1;
+	}
+	return 0;
+}
+
+int checkMemory(void *arr) {
+	if (arr == NULL) {
+		perror("Memory allocation failed!");
+		return -1;
 	}
 	return 0;
 }
@@ -350,11 +366,11 @@ ListStr createStrListCA(int len, char *string) {
  * @data createStrListCA: 创建相同值的字符串数组。
  * */
 typedef struct {
-	ListInt (*createIntList)(int len, int data[]);  // 创建整数数组
-	ListInt (*createIntListCA)(int len, int num);  // 创建相同值的整数数组
-	ListStr (*createStrList)(int len, char **data);  // 创建字符串数组
-	ListStr (*createStrListCA)(int len, char *string);  // 创建相同值的字符串数组
-} list_;  // 数组类
+	ListInt (*createInt)(int len, int data[]);  // 创建整数数组
+	ListInt (*createIntByCA)(int len, int num);  // 创建相同值的整数数组
+	ListStr (*createStr)(int len, char **data);  // 创建字符串数组
+	ListStr (*createStrByCA)(int len, char *string);  // 创建相同值的字符串数组
+} list_;  /* 数组类 */
 
 // *********** 定义数组类的实例 ***********
 
