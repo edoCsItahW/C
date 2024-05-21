@@ -139,27 +139,47 @@ printf("x + y = %d\n", sum);  // 输出10
 
 #define MY_ARG(type, value) do { \
     if (_Generic((type), int: 1, float: 2, double: 3) == 1) { \
-         // 对 int 类型的操作
-printf("Value is an int: %d\n", (int)(value));
-} else if (_Generic((type), int: 1, float: 2, double: 3) == 2) {
-	// 对 float 类型的操作
-	printf("Value is a float: %f\n", (float)(value));
-} else if (_Generic((type), int: 1, float: 2, double: 3) == 3) {
-	// 对 double 类型的操作
-	printf("Value is a double: %f\n", (double)(value));
-} else {
-	printf("Unsupported type\n");
+		printf("Value is an int: %d\n", (int)(value)); \
+	} else if (_Generic((type), int: 1, float: 2, double: 3) == 2) { \
+		printf("Value is a float: %f\n", (float)(value)); \
+	} else if (_Generic((type), int: 1, float: 2, double: 3) == 3) { \
+		printf("Value is a double: %f\n", (double)(value)); \
+	} else { \
+	printf("Unsupported type\n"); \
 } \
 } while (0)
 
-	int main() {
-		int i = 10;
-		float f = 3.14f;
-		double d = 2.71828;
+int main() {
+	int i = 10;
+	float f = 3.14f;
+	double d = 2.71828;
 
-		MY_ARG(int, i);    // 输出: Value is an int: 10
-		MY_ARG(float, f);  // 输出: Value is a float: 3.140000
-		MY_ARG(double, d); // 输出: Value is a double: 2.718280
+	MY_ARG(int, i);    // 输出: Value is an int: 10
+	MY_ARG(float, f);  // 输出: Value is a float: 3.140000
+	MY_ARG(double, d); // 输出: Value is a double: 2.718280
 
-		return 0;
-	}
+	return 0;
+}
+
+#define dbgprint(format,args...) fprintf(stderr, format, ##args)
+
+#define func(param, args...) printf("Param: %d, Args: " args, param)
+
+/*
+ * 在C语言中，当函数返回一个结构体实例时，你需要考虑几个因素来决定是返回结构体实例本身还是返回结构体实例的指针。以下是一些指导原则：
+
+返回结构体实例本身
+结构体较小：如果结构体很小（例如，只包含几个基本数据类型，如int、char等），那么复制整个结构体通常不会造成太大的性能开销。在这种情况下，返回结构体实例本身通常是可行的。
+不需要动态分配：如果结构体实例不需要在堆上动态分配内存（即，你不需要使用malloc、calloc或realloc来分配内存），那么返回结构体实例本身更为简单和直接。
+避免悬空指针：返回结构体实例可以避免由于忘记释放内存或由于某种原因释放了内存而导致的悬空指针问题。
+返回结构体实例的指针
+结构体较大：如果结构体很大，包含很多字段或者包含其他大的数据结构（如数组或嵌套的结构体），那么复制整个结构体可能会导致较大的性能开销。在这种情况下，返回结构体实例的指针通常更为高效。
+需要动态分配：如果你需要在堆上动态分配内存来存储结构体实例，那么你必须返回指向该实例的指针，以便调用者可以访问它。
+引用共享：如果多个函数或变量需要引用同一个结构体实例，那么返回指向该实例的指针可以实现这种引用共享。
+修改原始数据：如果你希望函数能够修改原始的结构体数据（而不是修改一个副本），那么你应该返回指向原始数据的指针。
+注意事项
+内存管理：如果你选择返回结构体实例的指针，那么你需要确保正确地管理内存。这通常意味着你需要使用malloc、calloc或realloc来分配内存，并在适当的时候使用free来释放内存。
+空指针检查：当函数返回指针时，调用者应该始终检查该指针是否为NULL，以避免由于未初始化的指针或内存分配失败而导致的程序崩溃。
+类型安全性：在C语言中，没有内置的类型安全性检查。因此，当你返回指向结构体实例的指针时，调用者必须确保他们正确地解释了该指针所指向的数据。如果调用者错误地假设了指针的类型，那么他们可能会访问无效的内存地址或解释数据的方式不正确。
+可移植性：在某些情况下，返回结构体实例的指针可能会导致可移植性问题。例如，在某些平台或编译器上，结构体的内存布局可能会因为填充（padding）或其他原因而有所不同。这可能会导致在不同平台或编译器上编译的代码产生不同的结果。因此，在跨平台项目中，你需要特别小心地使用结构体指针。
+ * */

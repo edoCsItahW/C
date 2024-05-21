@@ -16,7 +16,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "typelib.h"
+#include "type.h"
+// TODO: 重构
 
 typedef void (*arrPrintFuncType)(void *, int, int);  // 打印函数类型
 
@@ -45,10 +46,10 @@ static void arrPrintString(void *data, int idx, int len) {  // 打印字符串�
 static arrPrintFunc * arrPrintType(const Type type) {
 	arrPrintFunc * pFunc = (arrPrintFunc *)malloc(sizeof(arrPrintFunc));
 
-	if (type.value == Int.value) {
+	if (type == Int) {
 		pFunc->pFunc = arrPrintInt;
 	}
-	else if (type.value == String.value) {
+	else if (type == String) {
 		pFunc->pFunc = arrPrintString;
 	}
 	else {
@@ -82,7 +83,7 @@ typedef struct {
  * @param type 数组元素类型
  * @return 数组结构体
  * */
-Array createArr(int len, Type type, ...) {
+Array _createArr(int len, Type type, ...) {
 
 	va_list args;
 
@@ -94,14 +95,14 @@ Array createArr(int len, Type type, ...) {
 		exit(EXIT_FAILURE);
 
 	for (int i = 0; i < len; i++) {
-		if (type.value == Int.value) {
+		if (type == Int) {
 			int *tmp = (int *)malloc(sizeof(int));  // va_arg(args, int);
 
 			*tmp = va_arg(args, int);
 
 			arr.data[i] = (void *)tmp;
 		}
-		else if (type.value == String.value) {
+		else if (type == String) {
 			char **tmp = (char **)malloc(sizeof(char *)); // va_arg(args, char **);
 
 			*tmp = va_arg(args, char *);
@@ -122,6 +123,7 @@ Array createArr(int len, Type type, ...) {
 	return arr;
 
 }
+
 
 // *********** 实现数组结构体所具有方法 ***********
 
@@ -318,7 +320,7 @@ typedef struct {
 // *********** 定义数组方法结构体的实例 ***********
 
 SarrMethod Arr = {
-	.create = createArr,   // 创建数组
+	.create = _createArr,   // 创建数组
 	.createByRepeat = createByRepeat,  // 创建全为重复值的数组
 	.convertInt = convertInt,  // 将整数数组转换为数组结构体
 	.convertString = convertString,  // 将字符串数组转换为数组结构体
