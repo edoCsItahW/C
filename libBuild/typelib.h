@@ -12,17 +12,22 @@
  * @Date: 2024/05/18 下午9:29
  * @Commend:
  *******************************************************/
-
-
+/** 类型定义
+ *
+ * @data value: 类型值
+ * @data name: 类型名称
+ * */
 typedef struct {
 	int value;
 	char *name;
 } Type;
 
-Type Int = {1, "Int"};
-Type Float = {2, "Float"};
-Type Double = {3, "Double"};
-Type Char = {4, "Char"};
-Type Bool = {5, "Bool"};
-Type String = {6, "String"};
-Type Void = {7, "Void"};
+Type Int = {1, "Int"};  // 定义Int类型
+Type Float = {2, "Float"};  // 定义Float类型
+Type Double = {3, "Double"};  // 定义Double类型
+Type Char = {4, "Char"};  // 定义Char类型
+Type Bool = {5, "Bool"};  // 定义Bool类型
+Type String = {6, "String"};  // 定义String类型
+Type Void = {7, "Void"};  // 定义Void类型
+Type Array_ = {8, "Array"};  // 定义Array类型
+Type Dict_ = {9, "Dict"};  // 定义Dict类型

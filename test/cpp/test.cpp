@@ -11,45 +11,21 @@
 #include <iostream>
 #include <iomanip>
 
-//int main() {
-//	std::cout << "Hello, world!" << std::endl;
-//
-//	int v1 = 0, v2 = 0;
-//
-//	std::cin >> v1 >> v2;
-//
-//	std::cout << "The sum of " << v1 << " and " << v2 << " is " << v1 + v2 << std::endl;
-//
-//	int sum = 0, value = 0;
-//
-//	while (std::cin >> value)
-//		sum += value;
-//
-//	std::cout << "The sum of the values is " << sum << std::endl;
-//
-//	return 0;
-//}
 int main() {
-	double func(int n);
+	std::cout << "Hello, world!\7" << std::endl;
 
-	std::cout << std::fixed << std::setprecision(2) << func(10) << std::endl;
+	int v1 = 0, v2 = 0;
+
+	std::cin >> v1 >> v2;
+
+	std::cout << "The sum of " << v1 << " and " << v2 << " is " << v1 + v2 << std::endl;
+
+	int sum = 0, value = 0;
+
+	while (std::cin >> value)
+		sum += value;
+
+	std::cout << "The sum of the values is " << sum << std::endl;
 
 	return 0;
-}
-
-double func(int n) {
-	int i = 0, sum = 0;
-	double total = 0.0;
-
-	while (i < n) {
-		i++;
-
-		sum += i;
-
-		double result = 1.0 / sum;
-
-		total += result;
-	}
-
-	return total;
 }

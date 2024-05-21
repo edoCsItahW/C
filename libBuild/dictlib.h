@@ -16,6 +16,40 @@
 #include <string.h>
 #define MAX_SIZE 101
 
+typedef void (*dictPrintFuncType)(char *key, void *value, int idx, int len);
+
+/** 定义打印函数结构体
+ *
+ * @data pFunc 打印函数指针
+ * */
+typedef struct {
+	dictPrintFuncType pFunc;  // 打印函数指针
+} dictPrintFunc;
+
+void dictPrintInt(char* key, void *value, int idx, int len) {
+	printf(idx == len ? "'%s': %d" : "'%s': %d, ", key, *(int *)value);
+}
+
+void dictPrintString(char* key, void *value, int idx, int len) {
+	printf(idx == len ? "'%s': %s" : "'%s': %s, ", key, *(char **)value);
+}
+
+static dictPrintFunc * dictPrintType(const Type type) {
+	dictPrintFunc* pFunc = (dictPrintFunc *)malloc(sizeof(dictPrintFunc));
+
+	if (type.value == Int.value) {
+		pFunc->pFunc = dictPrintInt;
+	}
+	else if (type.value == String.value) {
+		pFunc->pFunc = dictPrintString;
+	}
+	else {
+		printf("Error: unsupported type.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return pFunc;
+}
 
 // ******************** 定义哈希函数 ************************
 
@@ -59,13 +93,20 @@ typedef struct pair {
  * */
 typedef struct {
 	int size;
-	char *type;
+	Type type;
 	Pair *table[MAX_SIZE];
 } Dict;
 
 // ******************** 字典操作函数实现 **********************
 
+/** 向字典中添加键值对
+ *
+ * @param dict 字典
+ * @param key 键
+ * @param value 值
+ * */
 void put(Dict *dict, const char *key, void *value) {
+
 	unsigned int index = hash(key);
 
 	Pair *pair = (Pair*)malloc(sizeof(Pair));
@@ -78,10 +119,13 @@ void put(Dict *dict, const char *key, void *value) {
 
 	pair->next = NULL;
 
-	dict->size++;
-
 }
 
+/** 从字典中删除键值对
+ *
+ * @param dict 字典
+ * @param key 键
+ * */
 void* get(Dict *dict, const char* key) {
 	unsigned int index = hash(key);
 
@@ -94,15 +138,63 @@ void* get(Dict *dict, const char* key) {
 
 		current = current->next;
 	}
+
 }
 
-Dict createDict(Array* keys, Array* values) {
-	if (keys->len != values->len) perror("Error: keys and values have different lengths");
+/** 打印字典
+ *
+ * @param dict
+ */
+void printDict(Dict dict) {
+	printf("{");
+
+	dictPrintFunc* method = dictPrintType(dict.type);
+
+	int count = 0;
+
+	for (int i = 0; i < MAX_SIZE; i++) {
+
+		Pair* current = dict.table[i];
+
+		if (current != NULL) count++;
+
+		while (current != NULL) {
+
+			method->pFunc(dict.table[i]->key, dict.table[i]->value, count, dict.size);
+
+			current = current->next;
+		}
+
+	}
+
+	printf("}\n");
+
+	free(method);
+
+}
+
+/** 创建字典
+ *
+ * @param keys 键数组
+ * @param values 值数组
+ * @param type 字典类型
+ * @return 字典
+ * */
+Dict createDict(Array keys, Array values, Type type) {
+	if (keys.len != values.len) perror("Error: keys and values have different lengths");
 
 	Dict *dict = (Dict*)malloc(sizeof(Dict));
 
-	for (int i = 0; i < keys->len; i++) {
-		put(dict, keys->data[i], values->data[i]);
+	for (int i = 0; i < MAX_SIZE; i++) {
+		dict->table[i] = NULL;
+	}
+
+	dict->type = type;
+
+	dict->size = keys.len;
+
+	for (int i = 0; i < keys.len; i++) {
+		put(dict, *(char**)keys.data[i], values.data[i]);
 	}
 
 	return *dict;
