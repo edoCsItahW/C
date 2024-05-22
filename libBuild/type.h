@@ -15,6 +15,9 @@
 #include <string.h>
 #include <ctype.h>
 
+/** 关于各类型值的枚举
+ *
+ * */
 typedef enum {
 	Int,
 	Char,

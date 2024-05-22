@@ -13,6 +13,7 @@
  * @Commend:
  *******************************************************/
 #include "array.h"
+#include <stdbool.h>
 #define MAX_SIZE 101
 
 typedef void (*dictPrintFuncType)(char *key, void *value, int idx, int len);
@@ -73,8 +74,7 @@ typedef struct {
 	Pair *table[MAX_SIZE];
 } Dict;
 
-void put(Dict *dict, const char *key, void *value) {
-
+void updata(Dict *dict, const char *key, void *value) {
 	unsigned int index = hash(key);
 
 	Pair *pair = (Pair*)malloc(sizeof(Pair));
@@ -86,6 +86,13 @@ void put(Dict *dict, const char *key, void *value) {
 	dict->table[index] = pair;
 
 	pair->next = NULL;
+
+}
+
+Pair* getPair(Dict* dict, const char* key) {
+	unsigned int index = hash(key);
+
+	return dict->table[index];
 
 }
 
@@ -151,8 +158,60 @@ Dict* createDict(Array* keys, Array* values) {
 	dict->size = keys->len;
 
 	for (int i = 0; i < keys->len; i++) {
-		put(dict, (char*)keys->data[i], values->data[i]);
+		updata(dict, (char*)keys->data[i], values->data[i]);
 	}
+
+	return dict;
+
+}
+
+_Bool include(Dict* dict, const char* key) {
+	unsigned int index = hash(key);
+
+	Pair *current = dict->table[index];
+
+	while (current != NULL) {
+		if (strcmp(current->key, key) == 0) {
+			return true;
+		}
+
+		current = current->next;
+	}
+
+	return false;
+
+}
+
+void modify(Dict* dict, const char* key, void* value) {
+	unsigned int index = hash(key);
+
+	Pair *current = dict->table[index];
+
+	while (current != NULL) {
+		if (strcmp(current->key, key) == 0) {
+			current->value = value;
+			return;
+		}
+
+		current = current->next;
+	}
+
+	perror("Error: key not found.");
+	exit(EXIT_FAILURE);
+}
+
+Dict* emptyDict(Type type) {
+	Dict *dict = (Dict*)malloc(sizeof(Dict));
+
+	CHECKMEM(dict);
+
+	for (int i = 0; i < MAX_SIZE; i++)
+	{
+		dict->table[i] = NULL;
+	}
+
+	dict->type = type;
+	dict->size = 0;
 
 	return dict;
 

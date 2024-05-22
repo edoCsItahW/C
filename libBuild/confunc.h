@@ -6,25 +6,46 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: test
+ * @File name: C
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/05/20 上午9:52
+ * @Date: 2024/05/22 下午6:55
  * @Commend:
  *******************************************************/
 #include "dict.h"
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
 
-int main() {
-	char *input = (char*)calloc(100, sizeof(char));
+Dict* countLetter(char* str) {
+	Dict* dict = emptyDict(Int);
 
-	printf("Please input a string: ");
+	for (int i = 0; i < strlen(str); i++) {
 
-	scanf("%s", input);
+		char key[2] = {str[i], '\0'};
 
+		if (include(dict, key))
+		{
+			Pair* pair = getPair(dict, key);
 
+			int* currentV = (int*)malloc(sizeof(int));
 
-	return 0;
+			CHECKMEM(currentV);
+
+			*currentV = *(int*)pair->value + 1;
+
+			free(pair->value);
+
+			pair->value = (void*)currentV;
+		}
+		else {
+			int* value = (int*)malloc(sizeof(int));
+
+			CHECKMEM(value);
+
+			*value = 1;
+
+			updata(dict, key, (void*)value);
+		}
+	}
+
+	return dict;
+
 }
