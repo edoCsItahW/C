@@ -12,18 +12,16 @@
  * @Date: 2024/05/20 上午9:52
  * @Commend:
  *******************************************************/
-#include "array.h"
+#include "dict.h"
 
 int main() {
 	Array* arr = createArr(5, 1, 2, 3, 4, 5);
 
-	printArr(arr);
+	Dict* dict = createDict(createArr(5, "a", "b", "c", "d", "e"), arr);
 
-	append(arr, &(int){6});
+	printDict(dict);
 
-	printArr(arr);
-
-	printArr(concat(arr, arr));
+	printf("%d", *(int*)get(dict, "a"));
 
 	return 0;
 }

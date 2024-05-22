@@ -9,10 +9,10 @@
  * @File name: C
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/05/21 下午6:34
+ * @Date: 2024/05/20 下午4:05
  * @Commend:
  *******************************************************/
-#include "type.h"
+#include "libArray.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -73,20 +73,6 @@ arrPrintFunc* arrPrintType(const Type type) {
 	return pFunc;
 }
 
-/** 定义数组结构体
- *
- * @brief 该数组结构体可以存储任意类型的数组，包括整数数组、字符串数组等。其原理为将每个元素的指针都转换为空指针.
- *
- * @data len 数组长度
- * @data data 数组元素指针数组
- * @data type 数组元素类型
- * */
-typedef struct {
-	int len;
-	void **data;
-	Type type;
-} Array;
-
 /** 创建数组
  *
  * @param data 数组元素指针数组
@@ -94,7 +80,7 @@ typedef struct {
  * @param type 数组元素类型
  * @return 数组结构体
  * */
-Array *_createArr(int len, Type type, ...) {
+Array *createArr_(int len, Type type, ...) {
 	va_list args;
 
 	va_start(args, type);
@@ -139,7 +125,7 @@ Array *_createArr(int len, Type type, ...) {
 	return arr;
 }
 
-#define createArr(len, first, args...) _createArr(len, getType(first), first, ##args)  // 创建数组
+#define createArr(len, first, ...) createArr_(len, getType(first), first, ##__VA_ARGS__)  // 创建数组
 
 /** 将整数数组转换为数组结构体
  *
@@ -198,7 +184,7 @@ Array* convertString(char *data[], int len) {
  * @param len 数组长度
  * @return 数组结构体
  * */
-Array* _createByRepeat(int len, Type type, void* data) {
+Array* createByRepeat_(int len, Type type, void* data) {
 
 	Array* arr = MALLOC(1, Array);
 
@@ -219,7 +205,7 @@ Array* _createByRepeat(int len, Type type, void* data) {
 
 }
 
-#define createByRepeat(len, value) _createByRepeat(len, getType(value), value)  // 创建全为知道值的数组
+#define createByRepeat(len, value) createByRepeat_(len, getType(value), value)  // 创建全为知道值的数组
 
 /** 销毁数组
  *
@@ -371,18 +357,6 @@ void exclude(Array arr, void *data) {
 
 	}
 }
-
-typedef struct {
-	Array* (*converInt)(int data[], int len);  // 将整数数组转换为数组结构体
-	Array* (*convertString)(char *data[], int len);  // 将字符串数组转换为数组结构体
-	void (*destroy)(Array *arr);  // 销毁数组
-	void (*remove)(Array* arr, int idx);  // 从数组中移除元素
-	void (*append)(Array* arr, void* data);  // 向数组中追加元素
-	void (*print)(Array* arr);  // 打印数组
-	Array* (*concat)(Array* arr1, Array* arr2);  // 拼接数组
-	Array* (*range)(int start, int end);  // 数组切片
-	void (*exclude)(Array arr, void *data);  // 数组元素去重
-} S_arrMethod;
 
 S_arrMethod Arr = {
 	.converInt = convertInt,

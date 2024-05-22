@@ -5,10 +5,10 @@ option(EXPORT "Export symbols" ON)
 
 if (EXPORT)
     add_compile_definitions(ALLOW_EXPORT)
-    add_library(arrLib SHARED ./arrLib_.c)
+    add_library(libArray SHARED libArray.c)
 
 else()
-    add_library(arrLib STATIC ./arrLib_.c)
+    add_library(libArray STATIC libArray.c)
 endif()
 
-target_include_directories(arrLib PUBLIC "E:/codeSpace/codeSet/C/libHead")
+target_include_directories(libArray PUBLIC "E:/codeSpace/codeSet/C/libHead")
