@@ -87,6 +87,18 @@ typedef struct {
 	Type type;
 } Array;
 
+Array* emptyArr(Type type) {
+	Array *arr = MALLOC(1, Array);
+
+	CHECKMEM(arr);
+
+	arr->len = 0;
+	arr->type = type;
+	arr->data = NULL;
+
+	return arr;
+}
+
 /** 创建数组
  *
  * @param data 数组元素指针数组

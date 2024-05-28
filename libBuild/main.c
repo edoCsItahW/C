@@ -9,22 +9,70 @@
  * @File name: test
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/05/20 ‰∏äÂçà9:52
+ * @Date: 2024/05/20 …œŒÁ9:52
  * @Commend:
  *******************************************************/
-#include "dict.h"
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "array.h"
+
+
+int findPrime(int firstNum) {
+
+	while (1) {
+
+		for (int n = 1; n <= 4; n = (2 * n + 1)) if (firstNum % n == n - 2) return firstNum;
+
+		firstNum++;
+
+	}
+
+	return 0;
+
+}
+
+
+Array* quickSort(Array* arr) {
+
+	if (arr->len <= 1) return arr;
+
+	int pivot = *(int*)(arr->data[0]);
+
+	Array* left = emptyArr(Int), *middle = emptyArr(Int), *right = emptyArr(Int);
+
+	for (int i = 0; i < arr->len; i++)
+	{
+
+		int current = *(int *)(arr->data[i]);
+
+		if (current < pivot) {
+
+			Arr.append(left, arr->data[i]);
+		}
+		else if (current == pivot) {
+
+			Arr.append(middle, arr->data[i]);
+
+		}
+		else {
+
+			Arr.append(right, arr->data[i]);
+
+		}
+	}
+
+	return Arr.concat(Arr.concat(quickSort(left), middle), quickSort(right));
+
+}
+
 
 int main() {
-	char *input = (char*)calloc(100, sizeof(char));
 
-	printf("Please input a string: ");
+//	printf("The first prime number is: %d\n", findPrime(1));
 
-	scanf("%s", input);
+	Array* arr = createArr(10, 5, 3, 5, 2, 7, 1, 9, 4, 6, 8);
 
-
+	Arr.print(quickSort(arr));
 
 	return 0;
 }
