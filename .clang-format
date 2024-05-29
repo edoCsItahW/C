@@ -1,55 +1,55 @@
 # Generated from CLion C/C++ Code Style settings
 ---
-Language: Cpp
-BasedOnStyle: LLVM
-AccessModifierOffset: -4
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
-AlignOperands: false
-AlignTrailingComments: false
-AlwaysBreakTemplateDeclarations: Yes
-BraceWrapping: 
-  AfterCaseLabel: true
-  AfterClass: true
-  AfterControlStatement: true
-  AfterEnum: true
-  AfterFunction: true
-  AfterNamespace: true
-  AfterStruct: true
-  AfterUnion: true
-  AfterExternBlock: false
-  BeforeCatch: true
-  BeforeElse: true
-  BeforeLambdaBody: true
-  BeforeWhile: true
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
-BreakBeforeBraces: Custom
-BreakConstructorInitializers: AfterColon
-BreakConstructorInitializersBeforeComma: false
-ColumnLimit: 120
-ConstructorInitializerAllOnOneLineOrOnePerLine: false
-IncludeCategories: 
-  - Regex: '^<.*'
-    Priority: 1
-  - Regex: '^".*'
-    Priority: 2
-  - Regex: '.*'
-    Priority: 3
-IncludeIsMainRegex: '([-_](test|unittest))?$'
-IndentCaseBlocks: true
-IndentWidth: 4
-InsertNewlineAtEOF: true
-MacroBlockBegin: ''
-MacroBlockEnd: ''
-MaxEmptyLinesToKeep: 2
-NamespaceIndentation: All
-SpaceInEmptyParentheses: false
-SpacesInAngles: false
-SpacesInConditionalStatement: false
-SpacesInCStyleCastParentheses: false
-SpacesInParentheses: false
-TabWidth: 4
-UseTab: Always
+Language: Cpp  # 语言
+BasedOnStyle: LLVM  # 基于的风格
+AccessModifierOffset: -4  # 访问修饰符的偏移量
+AlignConsecutiveAssignments: false  # 连续赋值对齐
+AlignConsecutiveDeclarations: false  # 连续声明对齐
+AlignOperands: false  # 操作符对齐
+AlignTrailingComments: false  # 尾随注释对齐
+AlwaysBreakTemplateDeclarations: Yes  # 总是断开模板声明
+BraceWrapping:   # 大括号格式化
+  AfterCaseLabel: true  # 在case标签后断开大括号
+  AfterClass: true  # 在类定义后断开大括号
+  AfterControlStatement: true  # 在控制语句后断开大括号
+  AfterEnum: true  # 在枚举定义后断开大括号
+  AfterFunction: true  # 在函数定义后断开大括号
+  AfterNamespace: true  # 在命名空间定义后断开大括号
+  AfterStruct: true  # 在结构体定义后断开大括号
+  AfterUnion: true  # 在联合体定义后断开大括号
+  AfterExternBlock: false  # 在extern块后断开大括号
+  BeforeCatch: true  # 在catch块前断开大括号
+  BeforeElse: true  # 在else块前断开大括号
+  BeforeLambdaBody: true  # 在lambda表达式主体前断开大括号
+  BeforeWhile: true  # 在while块前断开大括号
+  SplitEmptyFunction: true  # 空函数定义断开大括号
+  SplitEmptyRecord: true  # 空结构体定义断开大括号
+  SplitEmptyNamespace: true  # 空命名空间定义断开大括号
+BreakBeforeBraces: Custom  # 在大括号前断开
+BreakConstructorInitializers: AfterColon  # 在构造函数初始化列表的冒号后断开
+BreakConstructorInitializersBeforeComma: false  # 在构造函数初始化列表的逗号前断开
+ColumnLimit: 120  # 列限制
+ConstructorInitializerAllOnOneLineOrOnePerLine: false  # 构造函数初始化列表每行一个或每行一个
+IncludeCategories:   # 包含文件分类
+  - Regex: '^<.*'  # 系统头文件
+    Priority: 1  # 优先级
+  - Regex: '^".*'  # 本地头文件
+    Priority: 2  # 优先级
+  - Regex: '.*'  # 其他文件
+    Priority: 3    # 优先级
+IncludeIsMainRegex: '([-_](test|unittest))?$'  # 包含文件是否是主文件正则表达式
+IndentCaseBlocks: true  # case块缩进
+IndentWidth: 4  # 缩进宽度
+InsertNewlineAtEOF: true     # 在文件末尾插入新行
+MacroBlockBegin: ''  # 宏块开始标记
+MacroBlockEnd: ''  # 宏块结束标记
+MaxEmptyLinesToKeep: 2  # 最大空行数
+NamespaceIndentation: All  # 命名空间缩进
+SpaceInEmptyParentheses: false  # 空括号中的空格
+SpacesInAngles: false  # 尖括号中的空格
+SpacesInConditionalStatement: false  # 条件语句中的空格
+SpacesInCStyleCastParentheses: false  # C风格类型转换中的空格
+SpacesInParentheses: false  # 圆括号中的空格
+TabWidth: 4  # 制表符宽度
+UseTab: Always  # 使用制表符
 ...

@@ -6,29 +6,21 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: test
+ * @File name: C
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/05/20 ÉÏÎç9:52
+ * @Date: 2024/05/28 ä¸Šåˆ11:34
  * @Commend:
  *******************************************************/
-#include <omp.h>
+#include "type.h"
 
 
+typedef struct {
+	void *data;
+	int size;
+	Type type;
+} Var;
 
+#define newVar(data, type) (Var){data, sizeof(data), type}
 
-
-int main() {
-
-	int var1, var2, var3;
-
-	char *thread1 = "Thread 1";
-	char *thread2 = "Thread 2";
-	char *thread3 = "Thread 3";
-
-	#pragma omp parallel private(var1, var2) shared(var3) {
-
-	}
-
-	return 0;
-}
+Var v = newVar(10, Int);
