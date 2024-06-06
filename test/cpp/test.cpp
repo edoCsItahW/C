@@ -10,22 +10,39 @@
 //
 #include <iostream>
 #include <iomanip>
+#include <vector>
+
+struct PersonInfo {
+	std::string name;
+	std::vector<std::string> phones;
+};
 
 int main() {
-	std::cout << "Hello, world!\7" << std::endl;
+	std::string line, word;
 
-	int v1 = 0, v2 = 0;
+	std::vector<PersonInfo> people;
 
-	std::cin >> v1 >> v2;
+	while (std::getline(std::cin, line)) {
 
-	std::cout << "The sum of " << v1 << " and " << v2 << " is " << v1 + v2 << std::endl;
+		PersonInfo info;
 
-	int sum = 0, value = 0;
+		std::istringstream record(line);
 
-	while (std::cin >> value)
-		sum += value;
+		std::cout << "name: " << std::endl;
 
-	std::cout << "The sum of the values is " << sum << std::endl;
+		record >> info.name;
+
+		while (record >> word)
+
+			std::cout << "phone: " << std::endl;
+
+			info.phones.push_back(word);
+
+		people.push_back(info);
+
+	}
+
+
 
 	return 0;
 }

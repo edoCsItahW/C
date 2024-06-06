@@ -12,23 +12,8 @@
  * @Date: 2024/05/20 ÉÏÎç9:52
  * @Commend:
  *******************************************************/
-#include <omp.h>
-
-
-
-
 
 int main() {
-
-	int var1, var2, var3;
-
-	char *thread1 = "Thread 1";
-	char *thread2 = "Thread 2";
-	char *thread3 = "Thread 3";
-
-	#pragma omp parallel private(var1, var2) shared(var3) {
-
-	}
 
 	return 0;
 }
