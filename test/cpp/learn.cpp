@@ -1359,6 +1359,10 @@ int main() {
  // shared_ptr和new结合使用
  * shared_ptr<int> p1 = new int(1024);
 
+ // 不要混合使用普通指针和智能指针
+
+ // 不要使用get初始化另一智能指针或为智能指针赋值
+
  */
 
 /* 智能指针
@@ -1401,3 +1405,673 @@ int main() {
  //
 
  */
+
+// 智能指针和哑类
+// 删除器
+// shared_ptr<T> p(&arg, [](T*){ delete T; })
+
+// auto_ptr: 原始指针,不支持转移,不支持数组,不支持重载运算符,不支持自定义删除器,只是为了兼容旧代码,不推荐使用
+
+/* 动态数组
+
+ int *arr = new int[10];
+ delete[] arr;
+
+ unique_ptr<int[]> up(new int[10]);
+
+ */
+
+// allocator类
+// 用于动态分配内存,并提供统一的接口,使得程序员无需了解底层实现细节,就可以使用内存管理.
+// 定义在memory头文件中
+/*
+
+ allocator<string> alloc;
+ auto const p = alloc.allocate(10);  // 分配10个string对象
+
+ * allocator<T> a;  // 一个allocator对象,用于分配类型为T的对象
+ * a.allocate(n): 分配n个类型为T的对象
+ * a.deallocate(p, n): 释放由p指向的n个类型为T的对象
+ * a.construct(p, args): 在p指向的内存上构造一个类型为T的对象,并将args作为构造函数的参数
+ * a.destroy(p): 销毁由p指向的对象,调用其析构函数
+
+ * uninitialized_copy(b, e, p): 将[b, e)区间中的元素拷贝到p指向的内存上,构造函数不会被调用
+ * uninitialized_copy_n(b, n, p): 将[b, b+n)区间中的元素拷贝到p指向的内存上,构造函数不会被调用
+ * uninitialized_fill(p, q, args): 用args值填充[p, q)区间中的元素,构造函数不会被调用
+ * uninitialized_fill_n(p, n, args): 用args值填充[p, p+n)区间中的元素,构造函数不会被调用
+
+ */
+
+// 构造函数
+/*
+
+ * 拷贝构造函数:
+     // 当创建一个新对象,并将其初始化为另一个同类对象的副本时,会调用拷贝构造函数
+     * ClassName(const ClassName& other)
+ * 拷贝赋值运算符:
+     // 当将一个对象的值复制到另一个已存在的对象时,会调用拷贝赋值运算符
+     * ClassName& operator=(const ClassName& other)
+ * 移动构造函数:
+     // 从一个"临时"或"即将销毁"的对象中获取资源,而不是复制它,会调用移动构造函数
+     * ClassName(ClassName&& other);
+ * 移动赋值运算符:
+     // 与拷贝赋值运算符类似,但用于移动对象而不是复制对象,而是移到到另一个对象中
+     * ClassName& operator=(ClassName&& other);
+
+ */
+
+// 重载赋值运算符
+/*
+
+ // 赋值运算符的返回类型必须是引用,以便可以将其用于链式赋值
+ ClassName& operator=(const ClassName& other) {
+
+ }
+
+ */
+
+// 合成拷贝运算符
+// 如果一个类为定义自己的拷贝赋值运算符,编译器会自动为其生成一个合成拷贝运算符,其行为类似于默认的拷贝赋值运算符.
+
+// 阻止拷贝
+// 禁止拷贝构造函数和拷贝赋值运算符,使得类不能被拷贝,只能通过移动构造函数和移动赋值运算符来移动对象.
+// ClassName(const ClassName&) = delete;  // 阻止拷贝
+// ClassName& operator=(const ClassName&) = delete;  // 阻止赋值
+
+// private拷贝控制
+// 类可以将拷贝构造函数和拷贝赋值运算符声明为private,但仍然可以被移动构造函数和移动赋值运算符调用.
+// 这样可以防止类被拷贝,但允许其被移动.
+
+// 右值引用
+// 右值引用是一种特殊的引用,它只能绑定到一个将要销毁的对象,不能绑定到一个左值.
+// int &&r = 42;  // r是一个右值引用,绑定到一个临时对象,其值是42
+
+// move函数
+// 用于将左值转换为右值引用,并返回左值.
+// int &&r = move(x);  // r是一个右值引用,绑定到x的右值
+
+// noexcept关键字
+// noexcept关键字用于声明函数不会抛出异常,可以提高程序的效率.
+// void foo() noexcept;  // 声明foo不会抛出异常
+
+// 重载运算符
+/*
+
+ // 重载+运算符,用于将两个对象相加,并返回结果
+ * ClassName operator+(const ClassName& other) const {}
+
+ // 可被重载的运算符
+ * +, -, *, /, %, <, >, <=, >=, ==, !=, &&, ||, !, =, +=, -=, *=, /=, %=, &=, |=, ^=, <<=, >>=, ()
+ * ->, ->*, new, new[], delete, delete[], ::, .*, ., ?:, <<, >>
+
+ */
+
+// 标准库函数对象
+/*
+
+ // 算术对象
+ * plus<T>: 加法对象,用于加法运算
+ * minus<T>: 减法对象,用于减法运算
+ * multiplies<T>: 乘法对象,用于乘法运算
+ * divides<T>: 除法对象,用于除法运算
+ * modulus<T>: 取模对象,用于取模运算
+ * negate<T>: 取负对象,用于取负运算
+
+ // 关系
+ * equal_to<T>: 等于对象,用于判断两个对象是否相等
+ * not_equal_to<T>: 不等于对象,用于判断两个对象是否不相等
+ * greater<T>: 大于对象,用于判断第一个对象是否大于第二个对象
+ * less<T>: 小于对象,用于判断第一个对象是否小于第二个对象
+ * greater_equal<T>: 大于等于对象,用于判断第一个对象是否大于等于第二个对象
+ * less_equal<T>: 小于等于对象,用于判断第一个对象是否小于等于第二个对象
+
+ // 逻辑
+ * logical_and<T>: 逻辑与对象,用于判断两个对象是否都为真
+ * logical_or<T>: 逻辑或对象,用于判断两个对象是否有一个为真
+ * logical_not<T>: 逻辑非对象,用于取反一个对象的真值
+
+ */
+
+// 标准库function类型
+/*
+
+ * function<T> f;  // 一个用来存储可调用对象的空function对象
+ * function<T> f(nullptr);  // 显式构造空function对象
+ * function<T> f(obj);  // 显式构造一个function对象,其可调用对象为obj的副本
+ * f;  // 将f作为条件,但含有可调用对象时为true
+ * f(args...);  // 调用f的可调用对象,并将args作为参数传递
+
+ // 定义为function<T>的成员的类型
+ * result_type: 成员函数的返回类型
+ * argument_type: 成员函数的第一个参数类型
+ * first_argument_type: 成员函数的第一个参数类型
+ * second_argument_type: 成员函数的第二个参数类型
+
+ function<int (int, int)>
+
+ function<int (int, int)> f = add;  // 一个可调用对象,其可调用对象为add的副本
+ function<int (int, int)> f = divide();  // 函数对象类的对象,其可调用对象为divide的副本
+ function<int (int, int)> f = [](int x, int y) { return x + y; };  // 一个lambda表达式,其可调用对象为一个函数
+
+ // 函数调用运算符
+ map<string, function<int(int, int)>> m = {
+     {"+", add},
+     {"-", subtract},
+     {"*", multiply},
+     {"/", divide},
+     {"%", modulus}
+ };
+
+ m["+"](10, 5);  // 调用add函数,返回15
+
+ // NOTE: 不能将重载函数的名字存入function类型的对象中
+ int add(int i, int j) { return i + j }
+ Class add(int i, int j)
+ map<string, function<int (int, int)>> m;
+ m.insert({"add", add});  // 错误: 不能将重载函数的名字存入function类型的对象中
+
+ */
+
+// 类型转换运算符
+// operator T() const;  // 定义一个类型转换运算符,用于将类对象转换为T类型的值
+/*
+
+ class A {
+ public:
+
+     A(int i = 0): val(i) {
+        if (i < 0) throw std::invalid_argument("i must be non-negative");
+     }
+
+     operator int() const { return val; }
+
+ private:
+     std::size_t val;
+
+ };
+
+ // 显示的类型转换符
+ A a(10);
+ int i = static_cast<int>(a);  // 显式类型转换,将a转换为int类型的值
+
+ */
+
+// 面对对象
+class base {
+
+public:
+
+	base() = default;
+
+	base(const std::string &arg): arg(arg) {}
+
+	virtual std::string func() const { return "base"; }  // 虚函数
+
+	virtual ~base() = default;
+
+private:
+
+	std::string arg;
+
+protected:
+
+	std::string protectedArg = "protected";
+
+};
+
+// 定义派生类
+class derived : public base {
+
+public:
+
+	derived() = default;
+
+	derived(const std::string &arg, const std::string &arg2);
+
+	std::string func() const override;  // 重载虚函数
+
+private:
+
+	std::string arg2;
+	std::string protectedArg2 = "protected2";
+
+};
+
+// 派生类到基类的类型转换
+
+base item;  // 基类对象
+derived item2;  // 派生类对象
+
+base *p = &item;  // p指向base对象
+p = &item2;  // p指向derived对象
+
+base &r = item2;  // r是derived对象的引用
+
+// 因为在派生类对象中含有与其基类对应的组成部分,所以能把派生类的对象当成基类对象来使用,而且也能将基类的指针或引用绑定到派生类对象的基类部分上
+// NOTE: 编译器会隐式地执行派生类到基类的转换
+
+// 派生类构造函数
+// 虽然派生类对象中含有从基类基础而来的成员,但是派生类并不能直接初始化这些成员,和其他创建了基类对象的代码一样,派生类也必须使用基类的构造函数来初始化它们的基类部分
+
+// 派生类使用基类成员
+// 派生类可以直接使用基类成员,包括基类私有成员,基类保护成员,以及基类公有成员.
+/*
+
+ std::string base::func() const {
+
+     if (protectedArg == "protected")
+         return "base";
+
+     else
+         return "protected";
+
+ }
+
+ */
+
+// 继承与静态成员
+// 如果基类定义了一个静态成员,则在整个继承体系中只存在该成员的唯一定义
+class Base {
+
+public:
+
+	static void print();  // 基类的静态成员
+
+};
+
+class Derived : public Base {
+
+	void print()
+	{ // 重载基类的静态成员
+	}
+
+};
+
+// 防止继承
+class NoDerived final {  // final关键字用于防止派生类
+
+
+};
+
+// NOTE: 不存在基类向派生类的隐式类型转换
+// NOTE: 在对象之间不存在类型转换
+// NOTE: 派生类向基类的自动类型转换只对指针或引用类型有效,在派生类类型和基类类型中不存在这样的转换
+
+// 切掉(sliced down): 在派生类中重新定义了基类中的成员,使得派生类对象只包含派生类自己的成员,而基类的成员被切掉了.
+
+
+// 虚函数
+// 对虚函数的调用可能在运行时才被解析
+// 但我们在派生类中覆盖了某个虚函数时,可以再一次使用virtual关键字指出该函数的性质,不过不是必须的,因为一旦某个函数被声明成虚函数,则再所有派生类中它都是虚函数
+
+// 如果派生类准备继承某个虚函数,但由于某些人为因素导致参数列表不同(注: void f(int) const 的const也是),这致使意外的合法行为发送,
+// 编译器会认为新定义的这个函数与基类中原有的函数是相互独立的
+// 解决办法是在方法后加上override关键字,以保持一致性,并告诉编译器我们确实打算覆盖该虚函数
+
+// 不允许覆盖方法-final关键字(void f() final;)(不一定虚函数)
+
+// 回避虚函数的机制
+// 但我们希望对虚函数的调用不要进行动态绑定,而是强制执行某个特点版本的虚函数,可以使用作用域运算符来实现
+// double x = item->base::func();  // 强制调用基类的版本
+
+// 纯虚函数
+// 类似与python中的抽象方法
+
+// 派生构造函数只能初始化它的直接基类
+
+// 访问控制和继承
+// protected
+// * 与私有成员类似,受保护的成员对于类的用户来说是不可访问的
+// * 和共有成员类似,受保护的成员对于派生类的成员和友元来说也是可访问的
+// * 派生类的成员或友元只能通过派生类对象来访问基类的受保护成员,派生类对于一个基类对象中的受保护成员没有任何访问特权
+class Base1 {
+
+protected:
+    int x;
+
+};
+
+class Derived1 : public Base1 {
+
+	friend void f(Derived1&);  // 友元可以访问受保护的成员
+	friend void f(Base1&);  // 不能访问Base1::x
+
+	int y;
+
+};
+
+void f(Derived1& d) { d.y = d.x = 0; }  // 正确
+void f(Base1& b) { b.x = 0; }  // 错误: 不能访问受保护的成员
+
+// 派生类向基类转换的可访问性
+// * 只有当D公有地继承B时,用户代码才能使用派生类向基类的转换;如果D继承自B的方式是受保护的或者私有的,则用户代码不能使用该转换
+// * 不论D以什么方式继承B,D的成员函数和友元都能使用派生类向基类的转换;派生类向其直接基类的类型转换对于派生类的成员和友元来说永远都是可以访问的
+// * 如果D继承自B的方式是公有的或者受保护的,则D的派生类的成员和友元可以使用D向B的类型转换;反之,如果D继承B的方式是私有的,则不能使用
+
+// 友元不能被继承
+// 友元关系是一种依赖关系,而不是继承关系,因此不能被继承
+
+// 改变个别成员的访问性
+class Derived2 : public Base1 {
+
+protected:
+
+	using Base1::x;  // 允许访问基类的受保护成员
+
+};
+
+// 虚析构函数
+class Base3 {
+
+public:
+
+	virtual ~Base3() = default;  // 虚析构函数
+
+};
+
+// 函数模板
+// template<typename T>  // template + 模板参数列表
+
+template <typename T>
+
+T add(T x, T y) {
+	return x + y;
+}
+
+template <typename T> T foo(T *p) {
+	T tmp = *p;
+
+	return tmp;
+
+}
+
+template <typename T, class U>
+[[maybe_unused]] calc(const T&, const U&);  // 在模板参数列表中typename和class没有什么不同
+
+#include <string>
+
+// 非类型模板参数
+template <unsigned N>
+int compare(const char (&p1)[N], const char (&p2)[N]) {
+	return strcmp(p1, p2);
+}
+
+// inline和constexpr的函数模板
+template <typename T> inline T min(const T&, const T&);
+
+template <typename T> int compare(const T& x, const T& y) {
+
+	if (less<T>() (x, y)) return  -1;
+	if (less<T>() (y, x)) return 1;
+	return 0;
+
+}
+
+#include <memory>
+
+template <typename T> class Blob {
+
+public:
+
+	typedef T value_type;
+
+	typedef typename std::vector<T>::size_type size_type;
+
+	Blob();
+
+	Blob(std::initializer_list<T> il);
+
+	size_type size() const { return data->size(); }
+
+	bool empty() const { return data->empty(); }
+
+	void push_back(const T &t) { data->push_back(t); }
+
+	void push_back(T &&t) { data->push_back(std::move(t)); }
+
+	T& back();
+
+	T& operator[](size_type i);
+
+private:
+
+	std::shared_ptr<std::vector<T>> data;
+
+	void check(size_type i, const std::string &msg) const;
+
+};
+
+/* std::initializer_list
+
+ 在C++中，std::initializer_list是一个模板类，它用于表示初始化列表，即在大括号 {} 中的一组值。std::initializer_list 通常用于函数参数，以便可以使用初始化列表语法来初始化对象或传递值给函数。
+
+std::initializer_list 的主要用途是提供一种简洁的方式来初始化容器或调用接受多个参数的函数，特别是当参数的数量和类型未知或可变时。
+
+   在您给出的代码示例中：
+
+	   cpp
+	   Blob(std::initializer_list<T> il);
+Blob 是一个类（或结构体）的构造函数，它接受一个 std::initializer_list<T> 类型的参数 il。这意味着你可以使用初始化列表语法来创建 Blob 对象，如下所示：
+
+   cpp
+	   Blob<int> b = {1, 2, 3, 4, 5}; // 使用初始化列表语法创建 Blob 对象
+在 Blob 类的实现中，你可以遍历 std::initializer_list 中的元素，并将它们存储到 Blob 类的内部容器（如 std::vector<T>）中。
+
+   std::initializer_list 有几个重要的特性：
+
+	   它是只读的：你不能修改 std::initializer_list 中的元素。
+		   它是临时的：在构造函数返回后，std::initializer_list 中的数据可能不再有效。因此，你不应该存储指向 std::initializer_list 中元素的指针或迭代器。
+   它可以隐式地从初始化列表创建：当你使用大括号 {} 语法时，编译器会自动为你创建一个 std::initializer_list。
+   下面是一个简单的 Blob 类示例，它使用 std::initializer_list 构造函数：
+
+	   cpp
+#include <iostream>
+#include <vector>
+#include <initializer_list>
+
+   template <typename T>
+   class Blob {
+private:
+   std::vector<T> data;
+
+public:
+   // 使用 initializer_list 构造函数
+   Blob(std::initializer_list<T> il) : data(il) {}
+
+   // 其他成员函数...
+
+   void print() const {
+	   for (const auto& elem : data) {
+		   std::cout << elem << ' ';
+	   }
+	   std::cout << '\n';
+   }
+};
+
+int main() {
+   Blob<int> b = {1, 2, 3, 4, 5};
+   b.print(); // 输出: 1 2 3 4 5
+   return 0;
+}
+
+
+ */
+
+template <class T = int> class Numbers {
+public:
+	Numbers(T v = 0): val(v) {  }
+
+private:
+	T val;
+};
+
+// 控制实例化
+// 显示实例化
+/*
+
+ extern template declaration;  // 实例化声明
+ template declaration;  // 实例化定义
+
+ */
+
+// 标准类型转换模板
+/*
+
+ 对Mod<T>,其中Mod为       若T为                      则Mod<T>::type为
+ remove_reference:       1. X&或X&& 2. 否则            1. X 2. T
+ add_const               1. X&,const X或函数 2. 否则)   1. T 2. const T
+ add_lvalue_reference    1. X&, 2. X&&, 3. 否则        1. T 2. X& 3. T&
+ add_rvalue_reference    1. X&或X&&, 2. 否则           1. T 2. T&&
+ remove_pointer          1. X*, 2. 否则                1. X 2. T
+ add_pointer             1. X&或X&&, 2. 否则           1. X*, 2. T*
+ make_signed             1. unsigned X, 2. 否则        1. X, 2. T
+ make_unsigned           1. 带符合类型, 2. 否则          1. unsigned X, 2. T
+ remove_extent           1. X[n], 2. 否则              1. X, 2. T
+ remove_all_extents      1. X[n1][n2]..., 2. 否则      1. X, 2. T
+
+ */
+
+// std::move
+/*
+
+ std::move 是 C++11 引入的一个函数模板，它并不真的移动任何东西，而是将其参数转换为右值引用（rvalue reference），从而允许对象被移动（如果类型支持移动语义）而不是被复制。这通常用于提高性能，尤其是在处理大型对象或资源密集型对象时。
+
+要了解 std::move 的工作原理，首先我们需要理解左值（lvalue）和右值（rvalue）的概念：
+
+   左值（lvalue）：可以取地址的值，例如变量、数组元素等。左值可以出现在赋值运算符的左侧。
+   右值（rvalue）：临时对象或即将被销毁的对象。右值不能取地址，并且通常出现在赋值运算符的右侧。
+   std::move 接收一个左值，并“转换”为一个右值引用。但是，请注意这只是一个语义上的转换，并不涉及实际的数据移动。真正的移动操作（即资源的重新分配）是在被移动的对象（即源对象）的移动构造函数或移动赋值运算符中完成的。
+
+   以下是一个简单的示例，展示了如何使用 std::move：
+
+#include <iostream>
+#include <string>
+#include <utility> // for std::move
+
+   class MyString {
+public:
+   MyString(const std::string& s) : data(new std::string(s)) {}
+   MyString(MyString&& other) noexcept : data(other.data) {
+	   other.data = nullptr; // 移动后，源对象不再拥有资源
+   }
+   MyString& operator=(MyString&& other) noexcept {
+	   if (this != &other) {
+		   delete data; // 释放当前对象的资源
+		   data = other.data;
+		   other.data = nullptr; // 移动后，源对象不再拥有资源
+	   }
+	   return *this;
+   }
+   ~MyString() {
+	   delete data;
+   }
+
+   void print() const {
+	   if (data) {
+		   std::cout << *data << std::endl;
+	   } else {
+		   std::cout << "Moved or default constructed" << std::endl;
+	   }
+   }
+
+private:
+   std::string* data;
+};
+
+int main() {
+   MyString s1("Hello");
+   MyString s2 = std::move(s1); // 使用 std::move 将 s1 的资源“移动”到 s2
+   s1.print(); // 输出 "Moved or default constructed"
+   s2.print(); // 输出 "Hello"
+   return 0;
+}
+在这个示例中，我们定义了一个简单的 MyString 类，它使用动态分配的内存来存储字符串。我们为 MyString 提供了移动构造函数和移动赋值运算符，以便在可能的情况下使用移动语义而不是复制语义。在 main 函数中，我们使用 std::move 将 s1 的资源移动到 s2，从而避免了不必要的复制操作。
+
+ */
+
+// std::forward
+/*
+
+ std::forward 是 C++11 中引入的一个函数模板，它的主要作用是实现完美转发。完美转发允许在函数模板中将参数原封不动地传递给另一个函数，保持参数的类型和值类别（即左值或右值）不变。以下是关于 std::forward 的详细解释：
+
+作用
+完美转发：std::forward 的主要作用是确保在模板函数中，参数能够以其原始的左值或右值的形式传递给另一个函数，而不会引入不必要的类型转换或临时对象创建。
+保持参数类型：通过使用 std::forward，可以确保传递给下一个函数的参数类型与原始参数类型一致，无论是左值引用、右值引用还是值类型。
+避免性能开销：由于 std::forward 能够保持参数的引用类型，因此可以避免不必要的拷贝操作，从而提高性能。
+原理
+类型推导：std::forward 通过模板参数的类型推导来确定传入参数的类型。
+引用折叠：在 C++ 中，存在引用折叠的规则，即右值引用到右值引用会折叠为右值引用，左值引用到左值引用会折叠为左值引用。std::forward 利用这一规则来实现完美转发。
+std::forward 的两个版本：
+左值版本：用于处理左值参数。
+右值版本：用于处理右值参数。
+使用方法
+std::forward 的使用通常与通用引用（即 T&&）一起出现。例如：
+
+
+   template<typename T>
+   void foo(T&& arg) {
+   bar(std::forward<T>(arg)); // 使用 std::forward 将 arg 完美转发给 bar 函数
+}
+
+void bar(int& x) {
+   // 处理左值引用
+}
+
+void bar(int&& x) {
+   // 处理右值引用
+}
+
+int main() {
+   int a = 10;
+   foo(a); // 调用左值版本的 bar
+   foo(10); // 调用右值版本的 bar
+   return 0;
+}
+在这个例子中，foo 函数接受一个通用引用 T&& 作为参数，并使用 std::forward<T>(arg) 将参数完美转发给 bar 函数。由于 std::forward 的作用，bar 函数能够根据传入参数的左值或右值特性选择正确的重载版本。
+
+   总结
+   std::forward 是 C++ 中实现完美转发的重要工具，它能够在函数模板中保持参数的原始类型和值类别不变，从而提高代码的灵活性和性能。通过结合通用引用和 std::forward，可以编写出更加通用和高效的代码。
+
+ */
+
+// 模板特化
+template <typename T>
+void print(T const& t) {
+	std::cout << t << std::endl;
+}
+
+// 特化print函数模板以处理char*类型
+template <>
+void print<char*>(char* const& t) {
+	std::cout << "string: " << t << std::endl;
+}
+
+// 可变参数模板
+template <typename T, typename ...Args>
+void foo(const T &t, const Args& ... rest);
+
+// sizeof...运算符
+// 它返回参数个数
+// 例如: sizeof...(Args) 返回参数个数
+
+// 递归模板
+template <typename T>
+ostream &print(ostream &os, const T &t) {
+	return os << t;
+}
+
+template <typename T, typename... Args>
+ostream &print(ostream &os, const T &t, const Args&... args) {
+	os << t << ", ";
+	return print(os, args...);
+}
+
+// 包扩展
+// 类似python中的*args和**kwargs
+// 例如上面的args..., 并且debug_rep(args)...会对args中的每个元素调用debug_rep函数
+
+template <size_t N, size_t M>
+int compare(const char (&)[N], const char (&)[M]);
+
+// 标准库特殊设施
+
