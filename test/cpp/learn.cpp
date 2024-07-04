@@ -2075,3 +2075,154 @@ int compare(const char (&)[N], const char (&)[M]);
 
 // 标准库特殊设施
 
+// std::holds_alternative
+/*
+
+ 在C++17及以后的版本中，std::variant 是一个强大的类型，它允许你在单个变量中存储多种不同类型的值。为了查询一个 std::variant 实例是否包含特定类型的值，你可以使用 std::holds_alternative 函数模板。
+
+std::holds_alternative 的功能是检查 std::variant 对象是否持有特定类型的值。它接受两个参数：要检查的 std::variant 对象的引用和一个类型标识符（通常是类型名）。
+
+   下面是一个使用 std::variant 和 std::holds_alternative 的示例：
+
+	   cpp
+#include <iostream>
+#include <variant>
+
+   int main() {
+   std::variant<int, std::string> var;
+
+   // 给 variant 赋值一个 int
+   var = 42;
+
+   // 检查 variant 是否包含 int 类型的值
+   if (std::holds_alternative<int>(var)) {
+	   std::cout << "var holds an int with value: " << std::get<int>(var) << std::endl;
+   }
+
+   // 更改 variant 的值为一个 string
+   var = "Hello, World!";
+
+   // 检查 variant 是否包含 string 类型的值
+   if (std::holds_alternative<std::string>(var)) {
+	   std::cout << "var holds a string with value: " << std::get<std::string>(var) << std::endl;
+   }
+
+   // 试图访问一个 variant 不持有的类型将导致编译时错误
+   // std::cout << std::get<double>(var); // 错误：variant 不包含 double 类型
+
+   return 0;
+}
+在这个例子中，我们创建了一个可以存储 int 或 std::string 的 std::variant 对象。我们使用 std::holds_alternative 来检查 var 是否包含特定类型的值，并使用 std::get 来访问该值。
+
+	   注意，如果你试图访问 std::variant 不持有的类型，std::get 会在编译时失败。这就是为什么在使用 std::get 之前检查 std::holds_alternative 很有用的原因。
+
+		   此外，从C++20开始，你可以使用 std::visit 函数来更安全、更灵活地处理 std::variant，它可以接受一个访问者（visitor）函数或函数对象，并自动将其应用于 std::variant 中持有的值。
+
+ */
+
+// std::get
+/*
+
+ 在C++中，std::get 是与 std::variant 一起使用的一个函数模板，用于从 std::variant 对象中提取值。当你知道 std::variant 当前持有哪种类型的值时，你可以使用 std::get 来安全地获取该值。
+
+std::get 的用法如下：
+
+   cpp
+#include <iostream>
+#include <variant>
+
+   int main() {
+   std::variant<int, std::string> var;
+
+   // 给 variant 赋值一个 int
+   var = 42;
+
+   // 使用 std::get 提取 int 值（在运行时确保 variant 确实包含 int）
+   if (std::holds_alternative<int>(var)) {
+	   int value = std::get<int>(var);
+	   std::cout << "var holds an int with value: " << value << std::endl;
+   }
+
+   // 更改 variant 的值为一个 string
+   var = "Hello, World!";
+
+   // 使用 std::get 提取 string 值（在运行时确保 variant 确实包含 string）
+   if (std::holds_alternative<std::string>(var)) {
+	   std::string text = std::get<std::string>(var);
+	   std::cout << "var holds a string with value: " << text << std::endl;
+   }
+
+   // 试图使用 std::get 访问 variant 不持有的类型将导致编译时错误（如果未检查）
+   // 但如果检查了 std::holds_alternative，那么运行时会安全
+
+   return 0;
+}
+在上面的代码中，我们首先检查 std::variant 是否包含 int 或 std::string 类型的值，然后使用 std::get 来提取相应的值。
+
+	   需要注意的是，如果你试图使用 std::get 访问 std::variant 不持有的类型，并且没有首先使用 std::holds_alternative 进行检查，那么这会导致未定义行为（通常是程序崩溃）。因此，始终在使用 std::get 之前检查 std::variant 的当前状态是一个好习惯。
+
+		   从C++20开始，你还可以使用 std::visit 来更通用地处理 std::variant，它可以处理所有可能的类型，而无需显式地使用 std::get 或 std::holds_alternative。
+
+ */
+
+// reinterpre_cast
+/*
+
+ 在C++中，reinterpret_cast 是一种类型转换操作符，它提供了低级别的位模式重解释。它允许你将任何指针类型转换为任何其他指针类型，将整数转换为指针，或者将指针转换为整数，但不进行任何类型检查或数据转换。使用 reinterpret_cast 时需要特别小心，因为它可能会破坏类型安全，并导致未定义的行为。
+
+reinterpret_cast 的主要用途包括：
+
+   指针之间的转换：你可以使用 reinterpret_cast 将一个类型的指针转换为另一个类型的指针，而不管这两个类型是否兼容。
+	   cpp
+   int* ptr_int = new int(42);
+char* ptr_char = reinterpret_cast<char*>(ptr_int);
+但是，请注意，除非你知道这两个类型在内存中的表示方式，否则这样的转换可能是不安全的。
+2. 指针和整数之间的转换：你可以使用 reinterpret_cast 将指针转换为整数（通常是 uintptr_t 类型），或者将整数转换为指针。这通常用于低级编程，如内存管理或硬件交互。
+
+   cpp
+   int* ptr = ...;
+uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
+int* ptr2 = reinterpret_cast<int*>(addr);
+但是，这样的转换可能会导致未定义的行为，如果整数不能正确地表示指针地址，或者如果转换后的指针被解引用，但原始指针不再指向有效的内存。
+3. 函数指针之间的转换：你也可以使用 reinterpret_cast 在函数指针之间进行转换，但这通常是不安全的，除非你确切地知道你在做什么。
+
+	   由于 reinterpret_cast 提供了如此低级别的转换能力，因此它应该谨慎使用，并仅在你确切知道自己在做什么，以及为什么需要这样做的情况下使用。在许多情况下，使用其他类型转换操作符（如 static_cast、const_cast 或 dynamic_cast）会更安全，并且更符合C++的类型系统。
+
+ */
+
+/*
+
+ 在C++中，类的成员（包括属性和方法）的访问修饰符（`public`、`private`、`protected`）决定了它们如何从类的外部被访问和如何使用。选择合适的访问修饰符对于实现封装性、信息隐藏、代码复用和可维护性至关重要。
+
+以下是关于何时使用这些访问修饰符的一些基本指导原则：
+
+### 1. `public` 成员
+
+   * **属性**：当你想让类的用户直接访问或修改某个属性时，可以将它声明为`public`。然而，这种做法通常不被推荐，因为它破坏了封装性，使得类的内部状态容易被外部代码错误地修改。更常见的做法是为属性提供`public`的访问器（getter）和修改器（setter）方法。
+   * **方法**：类的大部分接口方法（即用于与类的用户进行交互的方法）都应该声明为`public`。这些方法允许类的用户执行某些操作或查询类的状态。
+
+### 2. `private` 成员
+
+   * **属性**：通常，类的所有属性都应该声明为`private`，除非有特定的理由需要它们被外部代码直接访问。通过将属性声明为`private`，你可以确保它们只能通过类提供的公共接口进行访问和修改，从而保持对类内部状态的完全控制。
+   * **方法**：实现类功能的辅助方法（即那些不直接参与类与用户交互的方法）通常应该声明为`private`。这些方法通常只被类的其他方法调用，以执行特定的任务或操作。
+
+### 3. `protected` 成员
+
+   * **属性**：`protected`属性在类的继承层次结构中是可见的，但它们不能直接被类的用户访问。通常，当你希望在子类中直接访问或修改父类的某个属性，但又不想让它对类的用户可见时，可以将该属性声明为`protected`。
+   * **方法**：与`protected`属性类似，`protected`方法允许子类访问和继承它们，但不允许类的用户直接访问。这些方法通常包含子类可能需要重写的功能或实现子类可能需要访问的特定逻辑。
+
+### 总结
+
+   * 使用`public`来定义类的接口，即用户可以直接与之交互的属性和方法。
+   * 使用`private`来隐藏类的内部实现细节，确保对类内部状态的完全控制。
+   * 使用`protected`来在类的继承层次结构中共享实现细节，同时保持对类的用户的隐藏性。
+
+通过遵循这些原则，你可以创建出具有良好封装性、可维护性和可扩展性的类。
+
+ */
+
+/*
+
+
+ */
+
