@@ -1,0 +1,32 @@
+# 忽略IDE文件
+.idea/
+*/.idea/
+x64/
+*/x64/
+.vs/
+*/.vs/
+
+
+# 忽略编译文件
+Debug/
+*/Debug/
+Release/
+*/Release/
+builds/
+*/builds/
+build/
+*/build/
+
+
+# 忽略cmake
+cmake-build-*/
+*/cmake-build-*/
+
+
+# 忽略非该项目文件
+pybind11/
+*/pybind11/
+Qt-Tutorial/
+*/Qt-Tutorial/
+cpython/
+*/cpython/
