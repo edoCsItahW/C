@@ -1,11 +1,39 @@
 cmake_minimum_required(VERSION 3.28.1)
 
-project(bridge VERSION 1.0)
+project(bridging VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+include_directories(${CMAKE_JS_INC})
+#file(GLOB SOURCE_FILES "*.cpp")
+#file(GLOB SOURCE_FILES "./py/*.cpp")
+
+
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC}
+        bridging.cpp)
+#)
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB}
+        ${CMAKE_SOURCE_DIR}/lib/python311.lib
+        ${CMAKE_SOURCE_DIR}/lib/node.lib
+)
 
 include(../../cmake/pybind11.cmake)
 include(../../cmake/node.cmake)
 
-add_executable(bridge bridging.cpp)
+
+execute_process(
+        COMMAND node -p "require('node-addon-api').include"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE NODE_ADDON_API_DIR
+)
+
+string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
+
+
+add_definitions(-DNAPI_VERSION=4)

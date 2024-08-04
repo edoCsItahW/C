@@ -19,7 +19,7 @@
 #include <cstdarg>
 #include <tchar.h>
 #include <cstdint>
-#include "../pybind11/pybind11.h"
+#include "pybind11/pybind11.h"
 
 namespace py = pybind11;
 
