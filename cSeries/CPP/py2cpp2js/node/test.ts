@@ -12,7 +12,7 @@ import bridging from '../build/Release/bridging'
 
 try {
     const obj = new bridging.PyObject();
-    // console.log(obj.__doc__);
+    console.log(obj.__doc__);
 }
 catch (e) {
     console.error(e)

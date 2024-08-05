@@ -8,45 +8,20 @@
 //
 // Created by Lenovo on 24-5-6.
 //
-#include <iostream>
 #include <functional>
-#include <stdexcept>
 
-
-template<typename T, typename... Args>
-class Decorator {
-private:
-	std::function<T(Args...)> _func;
-	bool _flag;
-
-public:
-	Decorator(bool flag = false): _flag(flag) {}
-
-	T wrapper(Args... args) {
-		try {
-			return _func(args...);
-		}
-		catch (std::exception& e) {
-			throw e;
-		}
-	}
-
-	std::function<T(Args...)> operator()(std::function<T(Args...)> func) {
-		_func = func;
-		return std::bind(&Decorator::wrapper, this, std::placeholders::_1, std::placeholders::_2);
-		// or use
-		// return [this](Args... args) { return this->wrapper(args...); };
-	}
+class Sample
+{
+	public:
+	Sample() {}
+	int test() {}
+	int test(int i) {}
 };
 
+Sample sample1;
+auto pFun1 = std::bind((int(Sample::*)())&Sample::test
+								  ,&sample1);
 
-int test(int x, int y) {
-	return x + y;
-}
-
-
-int main() {
-	auto f = Decorator<int, int, int>(true)(test);
-	std::cout << f(1, 2) << std::endl;
-	return 0;
-}
+std::function pFun2 = std::bind((int(Sample::*)(int))&Sample::test
+								  ,&sample1
+								  ,std::placeholders::_1);

@@ -19,8 +19,24 @@
 #include <map>
 #include <iostream>
 #include <any>
-#include <functional>
 #include "py/funcKit.h"
+
+#define DEBUG true
+
+void debug(const std::string& msg = "") {
+	if (DEBUG)
+		std::cout << msg << " -> ";
+}
+
+template<typename ...Args>
+void debug(const std::string& name, Args&&... args) {
+	if (DEBUG) {
+		std::cout << name << "(";
+		int i = 0;
+		((std::cout << args << (i++ == sizeof...(args) - 1 ? "" : ", ")), ...);
+		std::cout << ") -> ";
+	}
+}
 
 using namespace FuncKit;
 
@@ -41,6 +57,7 @@ InsMap* INS_CACHE = new InsMap();
  */
 template<isChildOf<py::object> T = py::object>
 py::object getPyAttr(const char* type, const char *key) {
+	debug("getPyAttr", type, key);
 	PyAttr obj = INS_CACHE->get(type);
 	return obj.attr(key).cast<T>();
 }
@@ -51,15 +68,17 @@ py::object getPyAttr(const char* type, const char *key) {
  * @property objType python类的名称
  * @property thisObj js类的this指针
  */
-class AttrMap : public std::map<const char*, node::Value> {
+class AttrMap : public std::map<const char*, Napi::Value> {
 	private:
 		const char* objType;
-		node::Object thisObj;
+		Napi::Object thisObj;
 
 	public:
-	    explicit AttrMap(node::Object thisObj, const char* type) : std::map<const char*, node::Value>(), objType(type), thisObj(thisObj) {}
+	    explicit AttrMap(Napi::Object thisObj, const char* type) : std::map<const char*, Napi::Value>(), objType(type), thisObj(thisObj) {
+			debug("AttrMap", type);
+		}
 
-		template<typename T, isChildOf<node::Value> U = node::Value>
+		template<typename T, isChildOf<Napi::Value> U = Napi::Value>
 		/**
 		 * @brief 获取属性值
 		 * @tparam T 将从getPyAttr获取的python属性值明确为T(cpp类型)类型.
@@ -72,15 +91,9 @@ class AttrMap : public std::map<const char*, node::Value> {
 		 * @return 类型属性值
 		 */
 		U get(const char* key) {
+			debug("AttrMap::get<T, U>", key);
 			if (find(key) == end()) {
-				this->insert(
-					std::make_pair(
-						key,
-						node::Value::From(thisObj.Env(), getPyAttr(objType, key).cast<T>()).template As<U>()
-						    )
-					);
-
-				thisObj.Set(key, this->at(key));
+				this->insert(std::make_pair(key, Napi::Value::From(thisObj.Env(), getPyAttr(objType, key).cast<T>()).template As<U>()));
 			}
 			return this->at(key).As<U>();
 		}
@@ -97,17 +110,14 @@ class AttrMap : public std::map<const char*, node::Value> {
 		 * @return 类型属性值
 		 */
 		auto get(const char* key) {
+			debug("AttrMap::get<T, CppTrans, JsTrans>", key);
 			if (find(key) == end()) {
-				this->insert(std::make_pair(
-					key,
-					JsTrans(CppTrans(getPyAttr(objType, key)))
-					));
-				thisObj.Set(key, this->at(key));
+				this->insert(std::make_pair(key, JsTrans(CppTrans(getPyAttr(objType, key)))));
 			}
 			return this->at(key).As<JsTrans>();
 		}
 
-		template<isChildOf<node::Value> T = node::Value>
+		template<isChildOf<Napi::Value> T = Napi::Value>
 		/**
 		 * @brief 设置属性值
 		 * @tparam T 值类型
@@ -116,66 +126,95 @@ class AttrMap : public std::map<const char*, node::Value> {
 		 * @details 该方法设置属性值,并将属性值存入map,并将属性值设置到js类对象中.
 		 */
 		void set(const char* key, const T& value) {
+			debug("AttrMap::set<T>", key, value);
 			this->insert(std::make_pair(key, value));
-			thisObj.Set(key, this->at(key));
 		}
 };
 
 
-class ObjectAdapter : public node::ObjectWrap<ObjectAdapter> {
+class ObjectAdapter : public Napi::ObjectWrap<ObjectAdapter> {
 	protected:
 		AttrMap attrs;
 
 	public:
-		explicit ObjectAdapter(const node::CallbackInfo &info);  // [外部调用]python的Object类不允许传入参数,如非空应抛出异常.
-		static node::Object Init(node::Env env, node::Object exports);
+		explicit ObjectAdapter(const Napi::CallbackInfo &info);  // [外部调用]python的Object类不允许传入参数,如非空应抛出异常.
+		static Napi::Object Init(Napi::Env env, Napi::Object exports);
 
-		template<typename T, isChildOf<node::Value> U = node::Value>
-		node::Value get(const node::CallbackInfo& info);
+		template<typename T, isChildOf<Napi::Value> U = Napi::Value>
+		Napi::Value get(const Napi::CallbackInfo& info);
 
-		template<isChildOf<node::Value> T>
-		void set(const node::CallbackInfo& info, const node::Value& value);
+		template<isChildOf<Napi::Value> T = Napi::Value>
+		void set(const Napi::CallbackInfo& info, const Napi::Value& value);
 };
 
 
-ObjectAdapter::ObjectAdapter(const node::CallbackInfo& info)
-	: ObjectWrap(info), attrs(info.This().As<node::Object>(), "object") {
-
+ObjectAdapter::ObjectAdapter(const Napi::CallbackInfo& info)
+	: ObjectWrap(info), attrs(info.This().As<Napi::Object>(), "object") {
+	debug("ObjectAdapter");
 	if (info.Length())
-		node::TypeError::New(info.Env(), "object() takes no arguments").ThrowAsJavaScriptException();
+		Napi::TypeError::New(info.Env(), "object() takes no arguments").ThrowAsJavaScriptException();
 
-	attrs.get<std::string, node::String>("__doc__");
+	Napi::String doc = attrs.get<std::string, Napi::String>("__doc__");
+//	Napi::Object p = Napi::Object::New(info.Env());
+//	p.Set("__doc__", doc);
+	info.This().As<Napi::Object>().Set("__doc__", doc);
 }
 
-template<typename T, isChildOf<node::Value> U>
-node::Value ObjectAdapter::get(const node::CallbackInfo& info) {
-	if (info.Length() != 1)
-		std::cout << "get() takes exactly one argument, and you have " << info.Length() << std::endl;
-	else
+template<typename T, isChildOf<Napi::Value> U>
+Napi::Value ObjectAdapter::get(const Napi::CallbackInfo& info) {
+//	debug("ObjectAdapter::get<T, U>", info[0].As<Napi::String>().Utf8Value().data());
+//	if (info.Length() != 1)
+//		std::cout << "get() takes exactly one argument, and you have " << info.Length() << std::endl;
+//	else
 //		node::TypeError::New(info.Env(), "get() takes exactly one argument").ThrowAsJavaScriptException();
-		return attrs.get<T, U>(info[0].As<node::String>().Utf8Value().data());
-	return node::Object(info.Env(), nullptr);
+	return attrs.get<T, U>(info[0].As<Napi::String>().Utf8Value().data());
+//	return Napi::Object(info.Env(), nullptr);
 }
 
-template<isChildOf<node::Value> T>
-void ObjectAdapter::set(const node::CallbackInfo& info, const node::Value& value) {
-	if (info.Length() != 2)
-		std::cout << "set() takes exactly two arguments, and you have " << info.Length() << std::endl;
-	else
-//		node::TypeError::New(info.Env(), "set() takes exactly two arguments").ThrowAsJavaScriptException();
-		attrs.set<T>(info[0].As<node::String>().Utf8Value().data(), value.As<T>());
+template<isChildOf<Napi::Value> T>
+void ObjectAdapter::set(const Napi::CallbackInfo& info, const Napi::Value& value) {
+	debug("ObjectAdapter::set<T>", info[0].IsObject(), value.IsObject(), info.Length());
+	if (info[0].IsString())
+		std::cout << info[0].As<Napi::String>().Utf8Value() << std::endl;
+	if (value.IsString())
+		std::cout << value.As<Napi::String>().Utf8Value() << std::endl;
+//	if (info[0].IsObject()) {
+//		auto obj = info[0].As<Napi::Object>();
+//		for (auto it : obj.GetPropertyNames()) {
+//			auto key = Napi::Value(it.second).As<Napi::String>().Utf8Value();
+//			std::cout << key << std::endl;
+//			std::cout << obj.Get(key).As<Napi::String>().Utf8Value() << std::endl;
+//		}
+//	}
+//	if (value.IsObject()) {
+//		auto obj = info[0].As<Napi::Object>();
+//		for (auto it : obj.GetPropertyNames())
+//			std::cout << Napi::Value(it.second).As<Napi::String>().Utf8Value().data() << std::endl;
+//	}
+
+//	if (info.Length() != 1)
+//		std::cout << "set() takes exactly two arguments, and you have " << info.Length() << std::endl;
+//	else
+////		node::TypeError::New(info.Env(), "set() takes exactly two arguments").ThrowAsJavaScriptException();
+////		attrs.set<T>(info[0].As<node::String>().Utf8Value().data(), value.As<T>());
+//		attrs.set<T>(info[0].As<Napi::String>().Utf8Value().data(), value.As<T>());
 }
 
-node::Object ObjectAdapter::Init(node::Env env, node::Object exports) {
-	node::Function func = DefineClass(
+
+Napi::Object ObjectAdapter::Init(Napi::Env env, Napi::Object exports) {
+	char doc[8] = "__doc__";
+	Napi::Function func = DefineClass(
 		env,
 		"PyObject",
 		{
 			InstanceAccessor(
 				"__doc__",
-				&ObjectAdapter::get<std::string, node::String>,
-				&ObjectAdapter::set<node::String>
-			)
+				&ObjectAdapter::get<std::string, Napi::String>,
+//				&ObjectAdapter::set<Napi::String>,
+				nullptr,
+				napi_property_attributes::napi_default,
+				doc
+				)
 		}
 );
 	exports.Set("PyObject", func);
@@ -183,7 +222,7 @@ node::Object ObjectAdapter::Init(node::Env env, node::Object exports) {
 }
 
 
-node::Object Init(node::Env env, node::Object exports) {
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	ObjectAdapter::Init(env, exports);
 	return exports;
 }

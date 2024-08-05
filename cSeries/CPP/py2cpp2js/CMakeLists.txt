@@ -22,7 +22,6 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB}
 include(../../cmake/pybind11.cmake)
 include(../../cmake/node.cmake)
 
-
 execute_process(
         COMMAND node -p "require('node-addon-api').include"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
