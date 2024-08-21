@@ -6,36 +6,32 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: bridge
+ * @File name: py_cpp_js
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/08/02 下午5:22
- * @Commend: 通过C++连接python以面向Node.js
+ * @Date: 2024/08/18 下午2:35
+ * @Commend:
  *******************************************************/
 
-
-#ifndef BRIDGE_PYOBJECT_H
-#define BRIDGE_PYOBJECT_H
-
+#ifndef PY_CPP_JS_PYOBJECT_H
+#define PY_CPP_JS_PYOBJECT_H
 #pragma once
 
-#include "funcKit.h"
+#include "../global.h"
 
-/** Object类是用来继承的,作为抽象基类,它的职责是为子类提供通用接口(通常是魔术方法或属性),而不应接受任何参数.
- *
- * @brief 实现python的Object类.
- */
 class ObjectAdapter : public node::ObjectWrap<ObjectAdapter> {
 	protected:
-
-		// 魔术属性
-		node::String MG__doc__;  // 文档字符串.
-
+		py::object module;
+		py::object instance;
+		std::map<std::string, node::Value> attrs{};
+//		static const char* name;
+//		static bool setAble;
 	public:
-		explicit ObjectAdapter(const node::CallbackInfo &info);  // [外部调用]python的Object类不允许传入参数,如非空应抛出异常.
+		/* python的Object类不允许传入参数,如非空应抛出异常. */
+		explicit ObjectAdapter(const node::CallbackInfo& info);
+		node::Value get(const node::CallbackInfo& info);
+		void set(const node::CallbackInfo& info);
 		static node::Object Init(node::Env env, node::Object exports);
-		node::Value getDoc(const node::CallbackInfo &info);  // 获取文档字符串.
 };
 
-
-#endif // BRIDGE_PYOBJECT_H
+#endif // PY_CPP_JS_PYOBJECT_H
