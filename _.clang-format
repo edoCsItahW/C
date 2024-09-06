@@ -1,0 +1,61 @@
+# Generated from CLion C/C++ Code Style settings
+---
+Language: Cpp  # 语言
+BasedOnStyle: LLVM  # 基于的风格
+AccessModifierOffset: 0  # 访问修饰符的偏移量
+AlignConsecutiveAssignments: false  # 连续赋值对齐
+AlignConsecutiveDeclarations: false  # 连续声明对齐
+AlignConsecutiveMacros:
+    Enabled: true  # 连续宏对齐
+    AcrossEmptyLines: true  # 空行也对齐
+    AcrossComments: true  # 注释也对齐
+AlignOperands: AlignAfterOperator  # 操作符对齐
+AlignTrailingComments: true  # 尾随注释对齐
+AlwaysBreakTemplateDeclarations: Yes  # 总是断开模板声明
+BraceWrapping:   # 大括号格式化
+    AfterCaseLabel: false  # 在case标签后断开大括号
+    AfterClass: false  # 在类定义后断开大括号
+    AfterControlStatement: false  # 在控制语句后断开大括号
+    AfterEnum: false  # 在枚举定义后断开大括号
+    AfterFunction: false  # 在函数定义后断开大括号
+    AfterNamespace: false  # 在命名空间定义后断开大括号
+    AfterStruct: false  # 在结构体定义后断开大括号
+    AfterUnion: false  # 在联合体定义后断开大括号
+    AfterExternBlock: false  # 在extern块后断开大括号
+    BeforeCatch: true  # 在catch块前断开大括号
+    BeforeElse: true # 在else块前断开大括号
+    BeforeLambdaBody: false  # 在lambda表达式主体前断开大括号
+    BeforeWhile: true  # 在while块前断开大括号
+    SplitEmptyFunction: false  # 空函数定义断开大括号
+    SplitEmptyRecord: false  # 空结构体定义断开大括号
+    SplitEmptyNamespace: false  # 空命名空间定义断开大括号
+BreakBeforeBraces: Attach  # 在大括号前断开
+BreakConstructorInitializers: BeforeColon  # 在构造函数初始化列表的冒号后断开
+BreakConstructorInitializersBeforeComma: false  # 在构造函数初始化列表的逗号前断开
+ColumnLimit: 120  # 列限制
+ConstructorInitializerAllOnOneLineOrOnePerLine: false  # 构造函数初始化列表每行一个或每行一个
+IncludeCategories:   # 包含文件分类
+    - Regex: '^<.*'  # 系统头文件
+      Priority: 1  # 优先级
+    - Regex: '^".*'  # 本地头文件
+      Priority: 2  # 优先级
+    - Regex: '.*'  # 其他文件
+      Priority: 3    # 优先级
+IncludeIsMainRegex: '([-_](test|unittest))?$'  # 包含文件是否是主文件正则表达式
+IndentCaseBlocks: false  # case块缩进
+IndentWidth: 4  # 缩进宽度
+InsertNewlineAtEOF: true     # 在文件末尾插入新行
+MacroBlockBegin: ''  # 宏块开始标记
+MacroBlockEnd: ''  # 宏块结束标记
+MaxEmptyLinesToKeep: 2  # 最大空行数
+NamespaceIndentation: All  # 命名空间缩进
+SpaceInEmptyParentheses: false  # 空括号中的空格
+SpacesInAngles: false  # 尖括号中的空格
+SpacesInConditionalStatement: false  # 条件语句中的空格
+SpacesInCStyleCastParentheses: false  # C风格类型转换中的空格
+SpacesInParentheses: false  # 圆括号中的空格
+TabWidth: 4  # 制表符宽度
+UseTab: Always  # 使用制表符
+SpaceBeforeCpp11BracedList: false   # C++11列表初始化中的空格
+SpaceAfterCStyleCast: false  # C风格类型转换后的空格
+AllowShortBlocksOnASingleLine: Always  # 单行块的允许长度

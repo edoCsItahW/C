@@ -11,35 +11,31 @@
 // 传建时间: 24-4-18 下午12:57
 // 当前项目名: C
 // 编码模式: utf-8
-// 注释: 
+// 注释:
 // ------------------------<Lenovo>----------------------------
 
-#include <iostream>
 #include "../../pybind11/pybind11.h"
+#include <iostream>
 
 namespace py = pybind11;
 
-struct Node
-{
-	int data;
-	Node* next;
+struct Node {
+        int data;
+        Node* next;
 };
 
-Node* createNode(int data)
-{
+Node* createNode(int data) {
+    Node* newNode = new Node;
 
-	Node* newNode = new Node;
+    if (!newNode) {
+        std::cerr << "Memory error" << std::endl;
+        return nullptr;
+    }
 
-	if (!newNode)
-	{
-		std::cerr << "Memory error" << std::endl;
-		return nullptr;
-	}
+    newNode->data = data;
+    newNode->next = nullptr;
 
-	newNode->data = data;
-	newNode->next = nullptr;
-
-	return newNode;
+    return newNode;
 }
 
 // void append(Node** head, int data)
@@ -68,43 +64,30 @@ Node* createNode(int data)
 //
 // }
 
-void append(Node*& head, int data)
-{
-	Node* new_node = createNode(data);
+void append(Node*& head, int data) {
+    Node* new_node = createNode(data);
 
-	if (new_node)
-	{
-		if (head == nullptr)
-		{
-			head = new_node;
-		}
-		else
-		{
-			Node* current = head;
+    if (new_node) {
+        if (head == nullptr) {
+            head = new_node;
+        } else {
+            Node* current = head;
 
-			while (current->next != nullptr)
-			{
-				current = current->next;
-			}
+            while (current->next != nullptr) current = current->next;
 
-			current->next = new_node;
-		}
-	}
-
+            current->next = new_node;
+        }
+    }
 }
 
-void printList(Node* node)
-{
-	while (node != nullptr)
-	{
-		std::cout << node->data << " -> ";
-		node = node->next;
-	}
+void printList(Node* node) {
+    while (node != nullptr) {
+        std::cout << node->data << " -> ";
+        node = node->next;
+    }
 
-	std::cout << "NULL" << std::endl;
-
+    std::cout << "NULL" << std::endl;
 }
-
 
 // int main()
 // {
@@ -117,27 +100,25 @@ void printList(Node* node)
 // 	printList(head);
 //
 // 	return 0;
-//gi
+// gi
 // }
 
+PYBIND11_MODULE(linkedList, m) {
+    m.doc() = "链表模块";
 
-PYBIND11_MODULE(linkedList, m)
-{
-	m.doc() = "链表模块";
+    py::class_<Node>(m, "Node").def(py::init<>()).def_readwrite("data", &Node::data).def_readwrite("next", &Node::next);
 
-	py::class_<Node>(m, "Node")
-		.def(py::init<>())
-		.def_readwrite("data", &Node::data)
-		.def_readwrite("next", &Node::next);
+    m.def("createNode", &createNode, "创建节点");
 
-	m.def("createNode", &createNode, "创建节点");
+    m.def(
+        "append",
+        [](py::object node_ptr, int value) {
+            Node* ptr = py::cast<Node*>(node_ptr);
+            append(ptr, value);
+            return ptr;
+        },
+        "添加节点"
+    );
 
-	m.def("append", [](py::object node_ptr, int value)
-	{
-		Node* ptr = py::cast<Node*>(node_ptr);
-		append(ptr, value);
-		return ptr;
-	}, "添加节点");
-
-	m.def("printList", &printList, "打印链表");
+    m.def("printList", &printList, "打印链表");
 }
