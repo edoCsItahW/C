@@ -6,23 +6,17 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: CPP
+ * @File name: bridging
  * @Author: edocsitahw
- * @Version: 1.0.0
- * @Date: 2024/08/15 下午9:20
+ * @Version: 1.1
+ * @Date: 2024/09/11 下午10:24
  * @Commend:
  *******************************************************/
-#include <iostream>
-#include "test.h"
 
-using namespace std;
+#ifndef BRIDGING_TEST_H
+#define BRIDGING_TEST_H
+#pragma once
 
+int global;
 
-int main() {
-
-    auto ins = global;
-
-    std::cout << ins << std::endl;
-
-    return 0;
-}
+#endif  // BRIDGING_TEST_H

@@ -6,23 +6,11 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: CPP
+ * @File name: DataFrameImpl
  * @Author: edocsitahw
- * @Version: 1.0.0
- * @Date: 2024/08/15 下午9:20
+ * @Version: 1.1
+ * @Date: 2024/09/09 下午8:06
  * @Commend:
  *******************************************************/
-#include <iostream>
-#include "test.h"
 
-using namespace std;
-
-
-int main() {
-
-    auto ins = global;
-
-    std::cout << ins << std::endl;
-
-    return 0;
-}
+#include "algo.h"

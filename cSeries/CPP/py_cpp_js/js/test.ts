@@ -10,10 +10,10 @@
 import { Builtins } from "./builtins";
 
 
-const ins = new Builtins.PyObject();
-console.log(ins.__dir__());
+// const ins = new Builtins.PyObject();
+// console.log(ins.__dir__());
 // @ts-ignore
 // console.log(Builtins.PyObject.__doc__);
-// const sys = Builtins.pyImport("atexit");
+const sys = Builtins.pyImport("atexit");
 // console.log("1")
-// console.log(sys.version)
+console.log(sys.version)

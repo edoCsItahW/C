@@ -37,7 +37,7 @@
 namespace py = pybind11;
 namespace node = Napi;
 
-namespace Global {
+namespace Glb {
 	// 全局python环境
 	extern py::scoped_interpreter guard;
 
@@ -45,9 +45,11 @@ namespace Global {
 	extern py::module builtins;
 
 	extern py::function dir;
+
+    extern std::map<std::string, node::Function> dynaCacher;
 }
 
-namespace Error {
+namespace Err {
 	void NotImplementedError(node::Env env, const std::string& msg);
 
 	void ArgumentError(node::Env env, const std::string& msg);
