@@ -67,9 +67,24 @@ void BinSearchTest() {
     }) << std::endl;
 }
 
+void insertSortTest() {
+    using namespace Algo;
+    std::vector ins1{3, 5, 2, 8, 10, 2};
+    std::vector ins2{1, 2, 3, 4, 5, 6};
+
+    for (auto i : insertSort(ins1)) std::cout << i << std::endl;
+}
+
+void shellSortTest() {
+    using namespace Algo;
+    std::vector ins{3, 5, 2, 8, 10, 2};
+
+    for (auto i : shellSort(ins)) std::cout << i << std::endl;
+}
+
 // test
 int main() {
-    BinSearchTest();
+    shellSortTest();
 
     return 0;
 }

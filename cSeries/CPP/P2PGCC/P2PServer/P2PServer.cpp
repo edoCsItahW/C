@@ -5,15 +5,7 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-/* P2P 程序服务端
- * 
- * 文件名：P2PServer.c
- *
- * 日期：2004-5-21
- *
- * 作者：shootingstars(zhouhuis22@sina.com)
- *
- */
+
 #include <iostream>
 #include <string>
 #include <list>

@@ -20,15 +20,17 @@
 #include <exception>
 #include <iostream>
 #include <utility>
+#include <source_location>
+#include <format>
 
 class Exception : public std::exception {
 	private:
 		std::string eMsg;
-
+        const std::source_location loc;
 	public:
-		explicit Exception(std::string msg) : eMsg(std::move(msg)) {}
+		explicit Exception(std::string msg, const std::source_location& loc = std::source_location::current()) : eMsg(std::move(msg)), loc(loc) {}
 
-		[[nodiscard]] std::string getMsg() const { return eMsg; }
+		[[nodiscard]] std::string getMsg() const { return std::format("{} line {} in <{}>", eMsg, loc.line(), loc.function_name()); }
 };
 
 #endif // P2PCLIENT_EXCEPTION_H

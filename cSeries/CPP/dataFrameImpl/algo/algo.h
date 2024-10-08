@@ -17,10 +17,10 @@
 #define DATAFRAMEIMPL_ALGO_H
 #pragma once
 
+#include <format>
+#include <functional>
 #include <iostream>
 #include <vector>
-#include <functional>
-
 
 namespace Algo {
     template<typename F, typename T>
@@ -41,12 +41,56 @@ namespace Algo {
         int left = 0, right = arr.size() - 1, mid;
         while (left <= right) {
             mid = (left + right) / 2;
-            if (arr[mid] == key) return mid;
-            else if (cmp == nullptr ? (arr[mid] < key) : cmp(arr[mid], key)) right = mid - 1;
-            else left = mid + 1;
+            if (arr[mid] == key)
+                return mid;
+            else if (cmp == nullptr ? (arr[mid] < key) : cmp(arr[mid], key))
+                right = mid - 1;
+            else
+                left = mid + 1;
         }
         return -1;
     }
-}
+
+    template<typename T>
+    std::vector<T>& insertSort(
+        std::vector<T>& arr,
+        int (*cmp)(const T&, const T&) =
+            [](const T& x, const T& y) {
+                if (x > y)
+                    return 1;
+                else if (x == y)
+                    return 0;
+                else if (x < y)
+                    return -1;
+            }
+    ) {
+        for (int i = 1; i < arr.size(); i++) {
+            T key = arr[i];
+            int j = i - 1;
+            while (j >= 0 && cmp(arr[j], key) > 0) arr[j-- + 1] = arr[j];
+            arr[j + 1] = key;
+        }
+
+        return arr;
+    }
+
+    template<typename T>
+    std::vector<T>& shell(std::vector<T>& arr, int gap) {
+        for (int i = gap; i < arr.size(); i++) {
+            int tmp = arr[i];
+            int j   = i - gap;
+            for (; j >= 0; j -= gap) if (arr[j] > tmp) arr[j + gap] = arr[j]; else break;
+            arr[j + gap] = tmp;
+        }
+        return arr;
+    }
+
+    template<typename T>
+    std::vector<T>& shellSort(std::vector<T>& arr) {
+        int gap = arr.size();
+        while (gap > 1) shell(arr, gap /= 2);
+        return arr;
+    }
+}  // namespace Algo
 
 #endif  // DATAFRAMEIMPL_ALGO_H

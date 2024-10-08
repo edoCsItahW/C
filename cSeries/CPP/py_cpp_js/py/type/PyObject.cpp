@@ -20,12 +20,8 @@
 // bool ObjectAdapter::setAble = false;
 
 ObjectAdapter::ObjectAdapter(const node::CallbackInfo &info)
-    : ObjectWrap(info) {
+    : ObjectWrap(info), module(Glb::builtins.attr("object")), instance(module(*Py::Tools::getArgs(info))) {
     //	if (info.Length()) Error::ArgumentError(info.Env(), "ValueError: ObjectAdapter constructor takes no arguments!");
-
-    module = Glb::builtins.attr("object");
-
-    instance = module(*Py::Tools::getArgs(info));
 }
 
 node::Value ObjectAdapter::get(const node::CallbackInfo &info) {

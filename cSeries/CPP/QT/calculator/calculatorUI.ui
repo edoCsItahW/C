@@ -10,8 +10,8 @@
 
 <ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
+ <widget class="QMainWindow" nodeName="MainWindow">
+  <property nodeName="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -19,12 +19,12 @@
     <height>600</height>
    </rect>
   </property>
-  <property name="windowTitle">
+  <property nodeName="windowTitle">
    <string>计算器</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
+  <widget class="QWidget" nodeName="centralwidget"/>
+  <widget class="QMenuBar" nodeName="menubar">
+   <property nodeName="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
@@ -33,7 +33,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" nodeName="statusbar"/>
  </widget>
  <resources/>
  <connections/>

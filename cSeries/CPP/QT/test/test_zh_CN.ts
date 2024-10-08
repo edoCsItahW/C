@@ -11,7 +11,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>MainWindow</name>
+    <nodeName>MainWindow</nodeName>
     <message>
         <location filename="testUI.ui" line="14"/>
         <location filename="cmake-build-debug/test_autogen/include/ui_testUI.h" line="51"/>

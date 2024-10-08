@@ -5,13 +5,14 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-/*****************************************************
- * @File name: P2PClient
- * @Author: edocsitahw
- * @Version: 1.1
- * @Date: 2024/08/22 下午12:09
- * @Commend:
- *******************************************************/
+/**
+ * @file server.h
+ * @author edocsitahw
+ * @version 1.1
+ * @date 2024/08/22 下午12:09
+ * @brief
+ * @copyright CC BY-NC-SA
+ * */
 
 #ifndef P2PCLIENT_SERVER_H
 #define P2PCLIENT_SERVER_H
@@ -20,33 +21,22 @@
 #include "../lib/proto.h"
 #include "../lib/Exception.h"
 
-namespace Global {
-	std::vector<Msg::UserListNode> ClientList;
+namespace Glb {
+    extern UserList clients;
 }
 
-void InitWinSock() {
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		throw Exception("Windows sockets 2.2 startup");
-	else
-		std::cout << "Using " << wsaData.szDescription << " (Status: " << wsaData.szSystemStatus << ")\n"
-				  << "with API versions " << LOBYTE(wsaData.wVersion) << "." << HIBYTE(wsaData.wHighVersion)
-				  << " to " << LOBYTE(wsaData.wHighVersion) << "." << HIBYTE(wsaData.wHighVersion) << "\n\n";
-}
+void initWinsock();
 
-SOCKET mksock(int type) {
-	SOCKET sock = socket(AF_INET, type, 0);
-
-	if (sock < 0) throw Exception("create socket failed");
-
-	return sock;
-}
-
-Msg::UserListNode GetUser(const std::string& username) {
-	for (const auto& user : Global::ClientList)
-		if (user.username == username)
-			return user;
-	throw Exception("not found user");
-}
+class Server {
+    private:
+        std::shared_ptr<SOCKET> sock;
+        sockaddr_in local;
+        sockaddr_in remote;
+        Msg::C2SMsg recvMsg;
+    public:
+        Server(const std::string& ip, unsigned short port, int type = SOCK_STREAM);
+        std::shared_ptr<Msg::User> operator[](std::string name);
+        [[noreturn]] void run();
+};
 
 #endif // P2PCLIENT_SERVER_H

@@ -5,82 +5,83 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-/* P2P ³ÌĞò´«ÊäĞ­Òé
+/* P2P ç¨‹åºä¼ è¾“åè®®
  *
- * ÈÕÆÚ£º2004-5-21
+ * æ—¥æœŸï¼š2004-5-21
  *
- * ×÷Õß£ºshootingstars(zhouhuis22@sina.com)
+ * ä½œè€…ï¼šshootingstars(zhouhuis22@sina.com)
  *
  */
 
 #pragma once
 #include <list>
 
-// ¶¨ÒåiMessageTypeµÄÖµ
-#define LOGIN		1
-#define LOGOUT		2
-#define P2PTRANS	3
-#define GETALLUSER	4
+// å®šä¹‰iMessageTypeçš„å€¼
+#define LOGIN 1
+#define LOGOUT 2
+#define P2PTRANS 3
+#define GETALLUSER 4
 
-// ·şÎñÆ÷¶Ë¿Ú
+// æœåŠ¡å™¨ç«¯å£
 #define SERVER_PORT 2280
 
-// ClientµÇÂ¼Ê±Ïò·şÎñÆ÷·¢ËÍµÄÏûÏ¢
+// Clientç™»å½•æ—¶å‘æœåŠ¡å™¨å‘é€çš„æ¶ˆæ¯
 struct stLoginMessage {
-	char userName[10];
-	char password[10];
+    char userName[10];
+    char password[10];
 };
 
-// Client×¢ÏúÊ±·¢ËÍµÄÏûÏ¢
+// Clientæ³¨é”€æ—¶å‘é€çš„æ¶ˆæ¯
 struct stLogoutMessage {
-	char userName[10];
+    char userName[10];
 };
 
-// ClientÏò·şÎñÆ÷ÇëÇóÁíÍâÒ»¸öClient(userName)Ïò×Ô¼º·½Ïò·¢ËÍUDP´ò¶´ÏûÏ¢
+// Clientå‘æœåŠ¡å™¨è¯·æ±‚å¦å¤–ä¸€ä¸ªClient(userName)å‘è‡ªå·±æ–¹å‘å‘é€UDPæ‰“æ´æ¶ˆæ¯
 struct stP2PTranslate {
-	char userName[10];
+    char userName[10];
 };
 
-// ClientÏò·şÎñÆ÷·¢ËÍµÄÏûÏ¢¸ñÊ½
+// Clientå‘æœåŠ¡å™¨å‘é€çš„æ¶ˆæ¯æ ¼å¼
 struct stMessage {
-	int iMessageType;
-	union _message {
-		stLoginMessage loginmember;
-		stLogoutMessage logoutmember;
-		stP2PTranslate translatemessage;
-	} message;
+    int iMessageType;
+
+    union _message {
+        stLoginMessage loginmember;
+        stLogoutMessage logoutmember;
+        stP2PTranslate translatemessage;
+    } message;
 };
 
-// ¿Í»§½ÚµãĞÅÏ¢
+// å®¢æˆ·èŠ‚ç‚¹ä¿¡æ¯
 struct stUserListNode {
-	char userName[10];
-	unsigned int ip;
-	unsigned short port;
+    char userName[10];
+    unsigned int ip;
+    unsigned short port;
 };
 
-// ServerÏòClient·¢ËÍµÄÏûÏ¢
+// Serverå‘Clientå‘é€çš„æ¶ˆæ¯
 struct stServerToClient {
-	int iMessageType;
-	union _message {
-		stUserListNode user;
-	} message;
+    int iMessageType;
+
+    union _message {
+        stUserListNode user;
+    } message;
 };
 
 //======================================
-// ÏÂÃæµÄĞ­ÒéÓÃÓÚ¿Í»§¶ËÖ®¼äµÄÍ¨ĞÅ
+// ä¸‹é¢çš„åè®®ç”¨äºå®¢æˆ·ç«¯ä¹‹é—´çš„é€šä¿¡
 //======================================
-#define P2PMESSAGE	  100 // ·¢ËÍÏûÏ¢
-#define P2PMESSAGEACK 101 // ÊÕµ½ÏûÏ¢µÄÓ¦´ğ
-#define P2PSOMEONEWANTTOCALLYOU                                                                                        \
-	102				 // ·şÎñÆ÷Ïò¿Í»§¶Ë·¢ËÍµÄÏûÏ¢
-					 // Ï£Íû´Ë¿Í»§¶Ë·¢ËÍÒ»¸öUDP´ò¶´°ü
-#define P2PTRASH 103 // ¿Í»§¶Ë·¢ËÍµÄ´ò¶´°ü£¬½ÓÊÕ¶ËÓ¦¸ÃºöÂÔ´ËÏûÏ¢
+#define P2PMESSAGE 100               // å‘é€æ¶ˆæ¯
+#define P2PMESSAGEACK 101            // æ”¶åˆ°æ¶ˆæ¯çš„åº”ç­”
+#define P2PSOMEONEWANTTOCALLYOU 102  // æœåŠ¡å™¨å‘å®¢æˆ·ç«¯å‘é€çš„æ¶ˆæ¯
+                                     // å¸Œæœ›æ­¤å®¢æˆ·ç«¯å‘é€ä¸€ä¸ªUDPæ‰“æ´åŒ…
+#define P2PTRASH 103                 // å®¢æˆ·ç«¯å‘é€çš„æ‰“æ´åŒ…ï¼Œæ¥æ”¶ç«¯åº”è¯¥å¿½ç•¥æ­¤æ¶ˆæ¯
 
-// ¿Í»§¶ËÖ®¼ä·¢ËÍÏûÏ¢¸ñÊ½
+// å®¢æˆ·ç«¯ä¹‹é—´å‘é€æ¶ˆæ¯æ ¼å¼
 struct stP2PMessage {
-	int iMessageType;
-	int iStringLen; // or IP address
-	unsigned short Port;
+    int iMessageType;
+    int iStringLen;  // or IP address
+    unsigned short Port;
 };
 
 using namespace std;

@@ -341,7 +341,7 @@ void overloadOperator() {
      cast-name<type>(expression)
 
  例如:
-     static_cast: 任何具有明确意义的类型转换,只要不包含底层consnt,都可以使用static_cast
+     static_cast: 任何具有明确意义的类型转换,只要不包含底层const,都可以使用static_cast
          如: int a = static_cast<int>(3.14);  // a的类型为int,3.14的类型为double,static_cast将double转换为int
 
      dynamic_cast: 用于类继承体系中,将基类指针或引用转换为派生类指针或引用,如果转换失败,会抛出bad_cast异常

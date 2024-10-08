@@ -314,7 +314,8 @@ namespace Py {
                         else
                             list[idx] = Error::try_(classForI, env)(env, cur, Tools::getPyType(cur));
                     }
-                } else if (py::isinstance<py::dict>(cur)) {
+                }
+                else if (py::isinstance<py::dict>(cur)) {
                     auto dict = cur.cast<py::dict>();
                     for (auto it : dict) {
                         auto key  = it.first.cast<std::string>().c_str();

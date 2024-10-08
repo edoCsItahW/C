@@ -9,106 +9,89 @@
  * @File name: P2PClient
  * @Author: edocsitahw
  * @Version: 1.1
- * @Date: 2024/08/22 涓嬪崍12:09
+ * @Date: 2024/08/22 下午12:09
  * @Commend:
  *******************************************************/
 
 #include "server.h"
 
+namespace Glb {
+    UserList clients{};
+}
 
-int main() {
-	try {
-		InitWinSock();
+void initWinsock() {
+    WSAData wsaData{};
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        throw Exception("Failed to initialize Winsock!");
+    else
+        std::cout << "使用`" << wsaData.szDescription << "`(状态: `" << wsaData.szSystemStatus << "`), API版本: '" << LOBYTE(wsaData.wVersion) << "." << HIBYTE(wsaData.wHighVersion) << "'至'"
+                  << LOBYTE(wsaData.wHighVersion) << "." << HIBYTE(wsaData.wHighVersion) << "'.\n"
+                  << std::endl;
+}
 
-		auto PrimaryUDP = mksock(SOCK_DGRAM);
+Server::Server(const std::string& ip, unsigned short port, int type) {
+    initWinsock();
+    sock = std::make_shared<SOCKET>(socket(AF_INET, type, 0));
+    if (sock == nullptr || *sock == INVALID_SOCKET) throw Exception("Failed to create socket!");
+    local = sockaddr_in(AF_INET, htons(port));
+//    local.sin_addr.s_addr = inet_addr(ip.c_str());
+    local.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (bind(*sock, (sockaddr*)&local, sizeof(sockaddr)) == SOCKET_ERROR)
+        throw Exception("Failed to bind socket!");
+}
 
-		sockaddr_in local{};
-		local.sin_family = AF_INET;
-		local.sin_port = htons(SERVER_PORT);
-		local.sin_addr.s_addr = htonl(INADDR_ANY);
+std::shared_ptr<Msg::User> Server::operator[](std::string name) {
+    for (auto& user : Glb::clients)
+        if (user->username == name)
+            return user;
+    throw  Exception("User not found!");
+}
 
-		if (bind(PrimaryUDP, (sockaddr*)&local, sizeof(sockaddr)) == SOCKET_ERROR)
-			throw Exception("bind failed");
-
-		sockaddr_in sender{};
-		Msg::Message recvbuf;
-		memset(&recvbuf, 0, sizeof(Msg::Message));
-
-		while (true) {
-			int dwSender = sizeof(sender);
-			int ret = recvfrom(PrimaryUDP, (char*)&recvbuf, sizeof(Msg::Message), 0, (sockaddr*)&sender, &dwSender);
-
-			if (ret <= 0) {
-				std::cerr << "recv failed\n" << std::endl;
-				continue;
-			}
-			else {
-				switch (recvbuf.iMsgType) {
-					case MsgType::LOGIN: {
-						std::cout << "has a user login: " << recvbuf.msg.logoutmember->username << "\n" << std::endl;
-						Msg::UserListNode currentuser;
-						currentuser.username = recvbuf.msg.logoutmember->username;
-						currentuser.ip = ntohl(sender.sin_addr.S_un.S_addr);
-						currentuser.port = ntohs(sender.sin_port);
-
-						Global::ClientList.push_back(currentuser);
-
-						int nodecount = static_cast<int>(Global::ClientList.size());
-
-						sendto(PrimaryUDP, (const char*)&nodecount, sizeof(int), 0, (const sockaddr*)&sender, sizeof(sender));
-
-						for (const auto& user : Global::ClientList)
-							sendto(PrimaryUDP, (const char*)&user, sizeof(Msg::UserListNode), 0, (const sockaddr*)&sender, sizeof(sender));
-
-						break;
-					}
-					case MsgType::LOGOUT: {
-						std::cout << "has a user logout: " << recvbuf.msg.logoutmember->username << "\n";
-						Global::ClientList.erase(std::remove_if(Global::ClientList.begin(), Global::ClientList.end(), [&](const Msg::UserListNode& user) { return user.username == recvbuf.msg.logoutmember->username; }));
-						break;
-					}
-					case MsgType::P2PTRANS: {
-						std::cout << inet_ntoa(sender.sin_addr) << " wants to p2p " << recvbuf.msg.translatemsg->username << "\n";
-						auto node = GetUser(recvbuf.msg.translatemsg->username);
-
-						sockaddr_in remote{};
-						remote.sin_family = AF_INET;
-						remote.sin_port = htons(node.port);
-						remote.sin_addr.s_addr = htonl(node.ip);
-
-						in_addr tmp{};
-						tmp.S_un.S_addr = htonl(node.ip);
-
-						std::cout << "the address is " << inet_ntoa(tmp) << ", and port is " << node.port << "\n" << std::endl;
-
-						Msg::P2PMsg transMsg{};
-						transMsg.iMsgType = P2PSOMEONEWANTTOCALLYOU;
-						transMsg.iStrLen = ntohl(sender.sin_addr.S_un.S_addr);
-						transMsg.port = ntohs(sender.sin_port);
-
-						sendto(PrimaryUDP, (const char*)&transMsg, sizeof(transMsg), 0, (const sockaddr*)&remote, sizeof(remote));
-						break;
-					}
-					case GETALLUSER: {
-						int command = GETALLUSER;
-						sendto(PrimaryUDP, (const char*)&command, sizeof(int), 0, (const sockaddr*)&sender, sizeof(sender));
-
-						int nodecount = static_cast<int>(Global::ClientList.size());
-						sendto(PrimaryUDP, (const char*)&nodecount, sizeof(int), 0, (const sockaddr*)&sender, sizeof(sender));
-
-						for (const auto& user : Global::ClientList)
-							sendto(PrimaryUDP, (const char*)&user, sizeof(Msg::UserListNode), 0, (const sockaddr*)&sender, sizeof(sender));
-						break;
-					}
-				}
-			}
-		}
-	}
-	catch (const Exception& e) {
-		std::cerr << e.getMsg() << std::endl;
-	}
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-	}
-	return 0;
+[[noreturn]] void Server::run() {
+    while (true) {
+        int len = sizeof(remote);
+        if (recvfrom(*sock, (char*)&recvMsg, sizeof(Msg::C2SMsg), 0, (sockaddr*)&remote, &len) <= 0)
+            continue;
+        else {
+            switch (recvMsg.type) {
+                using enum MsgType;
+                case LOGIN: {
+                    std::cout << "用户 <" << recvMsg.msg.login->username << "> 登录!" << std::endl;
+                    auto currUser = std::make_shared<Msg::User>(recvMsg.msg.login->username, ntohl(remote.sin_addr.S_un.S_addr), ntohs(remote.sin_port));
+                    Glb::clients.push_back(currUser);
+                    int count = static_cast<int>(Glb::clients.size());
+                    sendto(*sock, (const char*)&count, sizeof(int), 0, (const sockaddr*)&remote, sizeof(remote));
+                    for (auto& user : Glb::clients)
+                        sendto(*sock, (const char*)user.get(), sizeof(Msg::User), 0, (const sockaddr*)&remote, sizeof(remote));
+                    break;
+                }
+                case LOGOUT: {
+                    std::cout << "用户 <" << recvMsg.msg.logout->username << "> 登出!" << std::endl;
+                    for (int i = 0; i < Glb::clients.size(); i++)
+                        if (Glb::clients[i]->username == recvMsg.msg.logout->username)
+                            Glb::clients.erase(Glb::clients.begin() + i);
+                    break;
+                }
+                case P2PTRANS: {
+                    std::cout << "'" << inet_ntoa(remote.sin_addr) << "'向'" << recvMsg.msg.transMsg->username << "'发起点对点传输!" << std::endl;
+                    auto user = (*this)[recvMsg.msg.transMsg->username];
+                    sockaddr_in target{AF_INET, htons(user->port)};
+                    target.sin_addr.s_addr = htonl(user->ip);
+                    std::cout << "目标地址: " << inet_ntoa(target.sin_addr) << ":" << ntohs(target.sin_port) << std::endl;
+                    auto transMsg = Msg::P2PMsg{TransType::REQUEST, static_cast<int>(ntohl(remote.sin_addr.S_un.S_addr)), ntohs(remote.sin_port)};
+                    sendto(*sock, (const char*)&transMsg, sizeof(Msg::P2PMsg), 0, (const sockaddr*)&target, sizeof(target));
+                    break;
+                }
+                case GETALLUSER: {
+                    std::cout << "获取所有用户信息!" << std::endl;
+                    sendto(*sock, (const char*)GETALLUSER, sizeof(MsgType), 0, (const sockaddr*)&remote, sizeof(remote));
+                    int count = static_cast<int>(Glb::clients.size());
+                    sendto(*sock, (const char*)&count, sizeof(int), 0, (const sockaddr*)&remote, sizeof(remote));
+                    for (auto& user : Glb::clients)
+                        sendto(*sock, (const char*)user.get(), sizeof(Msg::User), 0, (const sockaddr*)&remote, sizeof(remote));
+                    break;
+                }
+            }
+        }
+    }
 }

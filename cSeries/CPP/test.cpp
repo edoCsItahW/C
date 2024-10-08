@@ -6,23 +6,19 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /*****************************************************
- * @File name: CPP
+ * @File nodeName: CPP
  * @Author: edocsitahw
  * @Version: 1.0.0
- * @Date: 2024/08/15 下午9:20
+ * @Date: 2024/08/15 ????9:20
  * @Commend:
  *******************************************************/
-#include <iostream>
 #include "test.h"
-
-using namespace std;
 
 
 int main() {
-
-    auto ins = global;
-
-    std::cout << ins << std::endl;
-
+    int arr[] = {5, 2, 8, 3, 1, 6, 4, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
     return 0;
 }

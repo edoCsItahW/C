@@ -16,6 +16,7 @@ include_directories(${CMAKE_JS_INC})
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC}
     main.cpp
     py/type/PyObject.cpp
+    py/type/PyType.cpp
     py/global.cpp
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")

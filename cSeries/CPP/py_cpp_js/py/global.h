@@ -5,13 +5,14 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-/*****************************************************
- * @File name: py_cpp_js
- * @Author: edocsitahw
- * @Version: 1.1
- * @Date: 2024/08/18 下午2:52
- * @Commend: 实现通过cpp桥接python与js交互
- *******************************************************/
+/**
+ * @file global.h
+ * @author edocsitahw
+ * @version 1.1
+ * @date 2024/08/18 下午2:52
+ * @brief 实现通过cpp桥接python与js交互
+ * @copyright CC BY-NC-SA
+ * */
 
 #ifndef PY_CPP_JS_GLOBAL_H
 #define PY_CPP_JS_GLOBAL_H
@@ -34,47 +35,127 @@
 // #include <typeindex>
 // #include <variant>
 
+/**
+ * @namespace py
+ * @typedef pybind11
+ * @brief 重命名pybind11为py
+ * */
 namespace py = pybind11;
+/**
+ * @namespace node
+ * @typedef Napi
+ * @brief 重命名Napi为node
+ * */
 namespace node = Napi;
 
+/**
+ * @namespace Glb
+ * @brief 全局变量
+ * @details 该命名空间用于存储全局变量。
+ * */
 namespace Glb {
-	// 全局python环境
+	/**
+	 * @var guard
+	 * @brief 全局解释器
+	 * @qualifier extern
+	 * */
 	extern py::scoped_interpreter guard;
 
-	/* 全局python内建模块 */
+	/**
+	 * @var builtins
+	 * @brief 全局python内建模块
+	 * @qualifier extern
+	 * */
 	extern py::module builtins;
 
+    /**
+     * @var dir
+     * @brief 全局python内建函数dir
+     * @qualifier extern
+     * */
 	extern py::function dir;
 
+    /**
+     * @var dynaCacher
+     * @brief 动态缓存器
+     * @qualifier extern
+     * */
     extern std::map<std::string, node::Function> dynaCacher;
 }
 
+/**
+ * @namespace Err
+ * @brief 错误处理
+ * @details 该命名空间用于处理错误。
+ * */
 namespace Err {
+    /**
+     * @brief 未实现错误
+     * @details 该函数用于处理未实现错误。
+     * @param env node环境
+     * @param msg 错误信息
+     * @exception NotImplementedError 未实现错误
+     * */
 	void NotImplementedError(node::Env env, const std::string& msg);
 
+    /**
+     * @brief 参数错误
+     * @details 该函数用于处理参数错误。
+     * @param env node环境
+     * @param msg 错误信息
+     * @exception ArgumentError 参数错误
+     * */
 	void ArgumentError(node::Env env, const std::string& msg);
 
 	/**
-	 * 在C++中实现单例模式，通常需要确保以下几点：
-	 *
-	 *	构造函数和析构函数是私有的，以防止外部实例化。
-	 *	拷贝构造函数和赋值运算符是私有的，以防止拷贝和赋值。
-	 *	提供一个静态方法来获取单例实例。
-	 *	使用一个静态成员变量来存储唯一的实例。
-	 *	以下是一个简单的单例模式实现示例：
-	 */
+	 * @class Try global.h
+	 * @brief 函数异常处理装饰器类
+	 * @qualifier decorator
+	 * @details 该类用于处理函数异常。
+	 * @remark 在C++中实现单例模式,通常需要确保以下几点: \n
+	 *	- 构造函数和析构函数是私有的,以防止外部实例化.
+	 *	- 拷贝构造函数和赋值运算符是私有的,以防止拷贝和赋值.
+	 *	- 提供一个静态方法来获取单例实例.
+	 *	- 使用一个静态成员变量来存储唯一的实例.
+	 * */
 	class Try {
 		private:
-			node::Env _env = nullptr;
+			node::Env _env = nullptr;  /// @private @memberof Try @var _env 环境变量
+			/**
+			 * @brief 构造函数
+			 * @details 私有构造函数,禁止外部实例化.
+			 * @param env node环境
+			 * @private @memberof Try
+			 * */
 			explicit Try(node::Env env);
 			explicit Try();
+            /**
+             * @brief 析构函数
+             * @details 私有析构函数,禁止外部实例化.
+             * @private @memberof Try
+             * */
 			~Try();
 
 		public:
+            /**
+             * @brief 获取单例实例
+             * @details 获取单例实例,如果不存在,则创建.
+             * @param env node环境
+             * @return 单例实例
+             * */
 			static Try& getInstance(node::Env env);
 			static Try& getInstance();
 			Try(const Try&) = delete;
 			void operator=(const Try&) = delete;
+            /**
+             * @brief 装饰器函数
+             * @details 装饰器函数,用于处理函数异常.
+             * @tparam R 返回值类型
+             * @tparam Args 参数类型
+             * @param f 函数指针
+             * @param loc 位置信息
+             * @return 函数指针
+             * */
 			template <typename R, typename... Args>
 			std::function<R(Args...)> operator()(R(*f)(Args...), std::source_location loc = std::source_location::current());
 			template <typename R, typename... Args>
