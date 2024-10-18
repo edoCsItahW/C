@@ -6,98 +6,101 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /**
- * @file proto.h
+ * @file _proto.h
  * @author edocsitahw
  * @version 1.1
- * @date 2024/08/22 上午2:57
- * @brief 协议头文件
+ * @date 2024/10/07 ����11:43
+ * @brief
  * @copyright CC BY-NC-SA
  * */
 
-#ifndef P2PCLIENT_PROTO_H
-#define P2PCLIENT_PROTO_H
+#ifndef P2PSERVER__PROTO_H
+#define P2PSERVER__PROTO_H
 #pragma once
 
-#include <algorithm>
-#include <iostream>
-#include <memory>
-#include <utility>
+#ifndef LIB
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT __declspec(dllimport)
+#endif
+
 #include <vector>
-#include <windows.h>
+#include <stdexcept>
+#include <string>
+#include <any>
+#include <iostream>
+#include <algorithm>
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+#else
+    #include <arpa/inet.h>
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <unistd.h>
+#endif
 
+class EXPORT User {
+    public:
+        std::string name;
+        sockaddr_in addr;
 
-/** 消息类型 */
-enum class MsgType { LOGIN = 1, LOGOUT = 2, P2PTRANS = 3, GETALLUSER = 4 };
-
-enum class TransType {
-    MSG = 101,
-    REQUEST = 102,
-    RESPONSE = 103,
-    TRASH = 104,
-    GETUSER = 105
+        User(const std::string& name, const sockaddr_in& addr);
+        User();
+        ~User();
+        User(const User& other);
+        std::string ip() const;
+        uint16_t port() const;
+        bool operator==(const User& other) const;
+        friend std::ostream& operator<<(std::ostream& os, const User& user);
 };
 
-namespace Msg {
-    /** 客户端登录时向服务器发送的消息 */
-    struct Login {
-        std::string username;
-        std::string password;
-    };
+enum class ServerFlag { LOGIN = 1, LOGOUT, P2PTRANS, GETUSER, NONE, REDIRECT, HEARTBEAT, ERR };
 
-    /** 客户端注销时向服务器发送的消息 */
-    struct Logout {
-        std::string username;
-    };
+enum class ClientFlag { MSG = 101, REQUEST, RESPONSE, TRASH, GETUSER, HEARTBEAT, ERR };
 
-    /** Client向服务器请求另外一个Client(userName)向自己方向发送UDP打洞消息 */
-    struct Translate {
-        std::string username;
-    };
+class EXPORT Msg {
+    public:
+        ServerFlag flag;
+        std::any info;  // can be any data
+        User sender;
+        User receiver;
+        Msg(ServerFlag flag, User sender, User receiver, std::any info = nullptr);
+        Msg(const Msg& other);
+        ~Msg();
+};
 
-    /** Client向服务器发送的消息格式 */
-    struct C2SMsg {
-        MsgType type;
+// ��ʱ��Clients����ʵ��ע�͵��Կ�ͨ������
+class EXPORT Clients : public std::vector<User> {
+    public:
+        void push_back(const User &Val) {
+            if (std::any_of(begin(), end(), [&Val](const User &user) { return user.name == Val.name; })) throw std::runtime_error("User already exists!");
+            std::vector<User>::push_back(Val);
+        }
+        User& operator[](const std::string& name) {
+            for (auto &client : *this) if (client.name == name) return client;
+            throw std::runtime_error("User not found!");
+        }
+};
 
-        union _msg {
-            std::shared_ptr<Login> login;
-            std::shared_ptr<Logout> logout;
-            std::shared_ptr<Translate> transMsg;
+class EXPORT Socket {
+    private:
+        int sockfd;
+        sockaddr_in _addr;
 
-            _msg()
-                : login(nullptr) {}
+    public:
+        Socket(int family = AF_INET, int type = SOCK_DGRAM);
+        ~Socket();
+        void bind(const sockaddr_in& addr);
+        void sendTo(const Msg& msg, const sockaddr_in& addr);
+        std::pair<Msg, sockaddr_in> recvFrom(size_t bufsize = 1024);
+        sockaddr_in getsockname() const;
+        std::string serialize(const Msg& msg);
+        Msg deserialize(const std::string& data);
+};
 
-            ~_msg() {
-                if (login) logout = nullptr;
-                if (logout) transMsg = nullptr;
-                if (transMsg) login = nullptr;
-            }
-        } msg;
-    };
+EXPORT void debug(const std::string& msg, const sockaddr_in& addr);
 
-    /** 客户节点信息 */
-    struct User {
-        std::string username;
-        unsigned int ip;
-        unsigned short port;
-    };
+EXPORT void debug(const std::string& msg, const char* ip, uint16_t port);
 
-    /** Server向Client发送的消息 */
-    struct S2CMsg {
-        MsgType type;
-
-        union _msg {
-            User user;
-        } msg;
-    };
-
-    /** 客户端之间发送消息格式 */
-    struct P2PMsg {
-        TransType type;
-        int iStrLen;
-        unsigned short port;
-    };
-}  // namespace Msg
-
-using UserList = std::vector<std::shared_ptr<Msg::User>>;
-
-#endif  // P2PCLIENT_PROTO_H
+#endif  // P2PSERVER__PROTO_H

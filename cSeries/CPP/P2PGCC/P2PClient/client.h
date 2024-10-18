@@ -19,7 +19,7 @@
 #pragma once
 
 #include "../lib/Exception.h"
-#include "../lib/proto.h"
+#include "../lib/__proto.h"
 
 /**
  * @namespace Glb

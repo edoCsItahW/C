@@ -2483,6 +2483,7 @@ struct A {
 
 // 结构化绑定
 auto [x, y] = std::make_tuple(1, 2);  // 结构化绑定,可以同时获取多个值,数组和结构体也可以使用结构化绑定
+auto normal = std::make_tuple(1, 2);
 
 // std::quoted  // 用于创建带引号的字符串
 

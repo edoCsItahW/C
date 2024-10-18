@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../executable)
 
+include(../../../cmake/jsoncpp.cmake)
+
 add_executable(${PROJECT_NAME}
     server.cpp
     main.cpp

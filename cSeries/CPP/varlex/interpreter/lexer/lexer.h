@@ -196,6 +196,7 @@ struct Token {
  * @class Lexer
  * @brief 词法分析器类
  * @details 该类实现了词法分析器的功能,可以将输入的字符串分割成Token序列.
+ *
  * ## 示例
  * @code
  * #include "lexer.h"

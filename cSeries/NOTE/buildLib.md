@@ -37,8 +37,6 @@ public:
 #endif // MY_LIBRARY_H
 ```
 
-CopyInsert
-
 在 `src/MyLibrary.cpp` 中编写库的实现：
 
 ```cpp
@@ -49,8 +47,6 @@ void MyLibrary::hello() {
     std::cout << "Hello from MyLibrary!" << std::endl;
 }
 ```
-
-CopyInsert
 
 ### 创建 CMakeLists.txt 文件
 
@@ -74,8 +70,6 @@ add_library(MyDynamicLibrary SHARED src/MyLibrary.cpp)
 # 设置导出宏
 target_compile_definitions(MyDynamicLibrary PRIVATE MY_LIBRARY_EXPORTS)
 ```
-
-CopyInsert
 
 ### 编译库
 

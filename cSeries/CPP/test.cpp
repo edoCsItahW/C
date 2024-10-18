@@ -5,20 +5,37 @@
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-/*****************************************************
- * @File nodeName: CPP
- * @Author: edocsitahw
- * @Version: 1.0.0
- * @Date: 2024/08/15 ????9:20
- * @Commend:
- *******************************************************/
+/**
+ * @file test.cpp
+ * @author edocsitahw
+ * @version 1.0.0
+ * @date 2024/08/15 上午9:20
+ * @brief 测试文件
+ * @copyright CC BY-NC-SA
+ * */
 #include "test.h"
+#include "confunc.h"
+#include <iostream>
 
+struct Visitor {
+    void operator()(const std::string& str) {
+        std::cout << str << std::endl;
+    }
+    void operator()(const std::wstring& wstr) {
+        std::wcout << wstr << std::endl;
+    }
+};
 
 int main() {
-    int arr[] = {5, 2, 8, 3, 1, 6, 4, 7};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    quickSort(arr, 0, n - 1);
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    using namespace os;
+    AnyStr content = readFile(R"(C:\Users\Lenovo\Desktop\test.txt)", Type::GBK);
+//    std::visit(Visitor(), content);
+    std::visit([](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, std::string>)
+            std::cout << arg << std::endl;
+        else if constexpr (std::is_same_v<T, std::wstring>)
+            std::wcout << arg << std::endl;
+    }, content);
     return 0;
 }

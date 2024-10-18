@@ -1,27 +1,30 @@
-/*****************************************************
- * @File name: C
- * @Author: edocsitahw
- * @Version: 1.1
- * @Date: 2024/09/26 上午9:07
- * @Commend:
- *******************************************************/
+/**
+ * @file main.c
+ * @author edocsitahw
+ * @version 1.1
+ * @date 2024/09/26 上午9:07
+ * @brief
+ * @copyright CC
+ **/
 
 #include "stdio.h"
 #include "test.h"
 
-void reverse(int arr[], int n) {
-    for (int i = 0; i < n / 2; i++) {
-        arr[i] ^= arr[n - i - 1];
-        arr[n - i - 1] ^= arr[i];
-        arr[i] ^= arr[n - i - 1];
-    }
+#define MAX_LEN 32
+
+bool repeat(int num) {
+    int count = 0, bitVec = 0, arr[MAX_LEN];
+    while (num &= (num - 1)) count++;
+    for (int i = 0; i < count; i++) if (bitVec & (1 << arr[i])) return true; else bitVec |= (1 << arr[i]);
+    return false;
 }
 
 int main() {
-    int arr[] = {92, 85, 66, 89, 89, 95, 79};
-    reverse(arr, sizeof(arr) / sizeof(arr[0]));
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
-        printf("%d ", arr[i]);
-    }
+    int num = 1, count = 0, res;
+    while (res = (num++ * 11))
+        if (!repeat(res) && res > 99) {
+            count++;
+            printf("%d\n", res);
+        }
     return 0;
 }

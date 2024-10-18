@@ -2,7 +2,7 @@
 # 语言: None, Cpp, Java, JavaScript, ObjC, Proto, TableGen, TextProto
 Language: Cpp
 BasedOnStyle: LLVM
-AccessModifierOffset: 0  # 访问说明符(public、private等)的偏移
+AccessModifierOffset: -4  # 访问说明符(public、private等)的偏移
 AlignAfterOpenBracket: BlockIndent  # 开括号(开圆括号、开尖括号、开方括号)后的对齐: Align, DontAlign, AlwaysBreak(总是在开括号后换行)
 AlignConsecutiveAssignments: true  # 连续赋值时，对齐所有等号
 AlignConsecutiveDeclarations: false  # 连续声明时，对齐所有声明的变量名
@@ -85,7 +85,7 @@ IndentCaseLabels: true  # 缩进case标签
 IndentWidth: 4  # 缩进宽度
 InsertBraces: false   # 在if、for、while、switch、catch、else、do、try、while后面添加空格
 IndentWrappedFunctionNames: false  # 函数返回类型换行时，缩进函数声明或函数定义的函数名
-IndentAccessModifiers: true  # 缩进访问说明符(public、private等)
+IndentAccessModifiers: false  # 缩进访问说明符(public、private等)
 IndentExternBlock: Indent  # 缩进外部块: None, Indent, Dedent
 IncludeBlocks: Merge  # 合并#include块: Merge, Regroup, None
 IndentGotoLabels: true  # 缩进goto标签

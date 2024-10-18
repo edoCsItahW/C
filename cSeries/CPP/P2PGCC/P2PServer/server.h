@@ -18,8 +18,8 @@
 #define P2PCLIENT_SERVER_H
 #pragma once
 
-#include "../lib/proto.h"
 #include "../lib/Exception.h"
+#include "../lib/__proto.h"
 
 namespace Glb {
     extern UserList clients;

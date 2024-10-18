@@ -82,10 +82,10 @@
  *
  * @dot
  * digraph G {
- *     a [ label="class A" ]; -> b;
+ *     a  -> b[ label="class A" ];
  *     b -> c;
  *     c
- *     }
+ * }
  * @enddot
  *
  * @msc
