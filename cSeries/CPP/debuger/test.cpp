@@ -15,32 +15,51 @@
  * */
 
 #include "src/debuger.h"
+#include <functional>
 
-// 一个普通函数
-void myFunction() {
-    std::cout << "This is my function." << std::endl;
+int test_commonFunc(int a, int b) {
+    std::cout << "Common function called." << std::endl;
+    return a + b;
 }
 
-// 一个类
-class MyClass {
-    public:
-        void myMethod() {
-            std::cout << "This is my method." << std::endl;
-        }
+class Test {
+public:
+    int memberFunc(int a) {
+        std::cout << "Member function called." << std::endl;
+        return a;
+    }
+    static int staticFunc(int a) {
+        std::cout << "Static function called." << std::endl;
+        return a;
+    }
+    int privateRefFunc(int a) {
+        std::cout << "Private ref function called." << std::endl;
+        auto boundMethod = std::bind(&Test::privateFunc, this, std::placeholders::_1);
+        boundMethod(a);
+        return a;
+    }
+
+private:
+    int privateFunc(int a) {
+        std::cout << "Private function called." << std::endl;
+        return a;
+    }
 };
 
+/** @hiderefby */
 int main() {
     using namespace debuger;
-    // 使用装饰器包装普通函数
-    Debuger decoratedFunction(myFunction);
-    decoratedFunction(); // 调用装饰后的函数
 
-    // 使用装饰器包装类方法
-    MyClass myClass;
+    Debuger decoratedFunction(test_commonFunc);
+    decoratedFunction(1, 2);
 
-    // 使用 std::bind 绑定类方法和对象
-    auto decoratedMethod = Debuger(std::bind(&MyClass::myMethod, &myClass));
-    decoratedMethod(); // 调用装饰后的方法
+    Test test;
+
+    auto memberBoundMethod = std::bind(&Test::memberFunc, &test, std::placeholders::_1);
+    memberBoundMethod(3);
+
+    auto staticBoundMethod = std::bind(&Test::staticFunc, std::placeholders::_1);
+    staticBoundMethod(4);
 
     return 0;
 }

@@ -21,20 +21,48 @@
 #include "debuger.h"
 
 namespace debuger {
-    template<Callable F>
-    Debuger<F>::Debuger(F func, std::source_location loc)
+    template<typename R, typename... Args>
+    Debuger<R, Args...>::Debuger(Debuger::F func, std::source_location loc)
         : _func(std::move(func))
         , _loc(loc) {}
 
-    template<Callable F>
-    template<typename... Args>
-    auto Debuger<F>::operator()(Args &&...args) -> decltype(_func(std::forward<Args>(args)...)) {
+    template<typename R, typename... Args>
+    R Debuger<R, Args...>::operator()(Args &&...args) {
         try {
             return _func(std::forward<Args>(args)...);
-        } catch (const std::exception &e) {
-            std::cerr << "Exception at " << _loc.file_name() << ":" << _loc.line() << " " << e.what() << std::endl;
+        }
+        catch (const std::exception &e) {
+            if constexpr (std::is_same_v<void, R>) {
+                // 如果返回值是void,则什么都不做
+            }
+            else {
+                // 调试器并不中断程序的运行
+                std::cerr << "Exception at " << _loc.file_name() << ":" << _loc.line() << " " << e.what() << std::endl;
+                return R{};
+            }
         }
     }
 }  // namespace debuger
 
 #endif  // TEST_DEBUGER_HPP
+
+//    template<Callable F>
+//    Debuger<F>::Debuger(F func, std::source_location loc)
+//        : _func(std::move(func))
+//        , _loc(loc) {}
+//
+//    template<Callable F>
+//    template<typename... Args>
+//    auto Debuger<F>::operator()(Args &&...args) -> decltype(auto) {  // std::declval<F>(std::forward<Args>(args)...)
+//        using R = decltype(_func(std::forward<Args>(args)...));
+//        try {
+//            return _func(std::forward<Args>(args)...);
+//        }
+//        catch (const std::exception &e) {
+//            if constexpr (std::is_same_v<void, R>) {}
+//            else {
+//                std::cerr << "Exception at " << _loc.file_name() << ":" << _loc.line() << " " << e.what() << std::endl;
+//                return R{};
+//            }
+//        }
+//    }

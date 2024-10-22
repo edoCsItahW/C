@@ -4,18 +4,20 @@
 // This software is protected by copyright law. Reproduction, distribution, or use for commercial
 // purposes is prohibited without the author's permission. If you have any questions or require
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
-#include "client.h"
 
-#pragma comment(lib, "ws2_32.lib")
+/**
+ * @file proto.h
+ * @author edocsitahw
+ * @version 1.1
+ * @date 2024/8/12 上午8:06
+ * @brief
+ * @copyright CC BY-NC-SA
+ * */
 
-int main() {
-    try {
-        Client client;
-        client.run();
-        return 0;
-    }
-    catch (const Exception& e) {
-        std::cerr << "Exception: " << e.getMsg() << std::endl;
-        return 1;
-    }
-}
+#ifndef C_PROTO_HPP
+#define C_PROTO_HPP
+#pragma once
+
+
+
+#endif //C_PROTO_HPP

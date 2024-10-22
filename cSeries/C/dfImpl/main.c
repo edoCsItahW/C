@@ -122,6 +122,16 @@ void test_OrderQueue() {
     printf("The first element is: %d\n", *(int*)&res);
 }
 
+/** @brief 查找细胞 */
+void test_NearDetection() {
+    int arr[][5] = {
+        {1, 2, 0, 0, 0},
+        {3, 0, 0, 2, 7},
+        {0, 0, 0, 0, 5},
+        {0, 2, 4, 0, 0}
+    };
+}
+
 int main() {
     test_OrderQueue();
     return 0;

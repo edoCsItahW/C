@@ -6,40 +6,10 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /**
- * @file test.cpp
+ * @file main.cpp
  * @author edocsitahw
- * @version 1.0.0
- * @date 2024/08/15 上午9:20
- * @brief 测试文件
+ * @version 1.1
+ * @date 2024/10/20 下午8:56
+ * @brief
  * @copyright CC BY-NC-SA
  * */
-#include "test.h"
-#include "confunc.h"
-
-/*
-%:include <iostream>
-
-int main() <%
-    std::string val<:1:>;
-    val<:0:> = "Hello, world!";
-    std::cout << *val << std::endl;
-%>
- */
-
-/*
-int main() {
-    https://www.zhihu.com
-    return 0;
-}
- */
-
-/*
- (a == 0 ? a : b) == 1;
- 等价于
- if (a == 0) a = 1; else b = 1;
- */
-
-/*
-for (struct { int a; float b; } loop = { 1, 2.0 }; ...; ...)
- */
-

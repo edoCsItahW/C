@@ -10,8 +10,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../executable)
 include(../../../cmake/jsoncpp.cmake)
 
 add_executable(${PROJECT_NAME}
-    server.cpp
-    main.cpp
+        ../lib/proto.cpp
+        client.cpp
+        main.cpp
 )
 
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/../lib/ws2_32.dll)

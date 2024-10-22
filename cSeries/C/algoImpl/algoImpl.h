@@ -1,15 +1,21 @@
-/*****************************************************
- * @File name: C
- * @Author: edocsitahw
- * @Version: 1.1
- * @Date: 2024/09/26 上午9:06
- * @Commend:
- *******************************************************/
+// Copyright (c) 2024. All rights reserved.
+// This source code is licensed under the CC BY-NC-SA
+// (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+// This software is protected by copyright law. Reproduction, distribution, or use for commercial
+// purposes is prohibited without the author's permission. If you have any questions or require
+// permission, please contact the author: 2207150234@st.sziit.edu.cn
 
-#ifndef C_TEST_H
-#define C_TEST_H
+/**
+ * @file algoImpl.h
+ * @author edocsitahw
+ * @version 1.1
+ * @date 2024/10/19 下午8:45
+ * @brief
+ * */
+
+#ifndef TEST_ALGOIMPL_H
+#define TEST_ALGOIMPL_H
 #pragma once
-
 
 /** @brief 交换两个整数的值
  *
@@ -190,4 +196,8 @@ long long binPowR(int x, int n);
  */
 long long binPowI(int x, int n);
 
-#endif  // C_TEST_H
+int intLen(int num);
+
+bool repeat(int num);
+
+#endif  // TEST_ALGOIMPL_H
