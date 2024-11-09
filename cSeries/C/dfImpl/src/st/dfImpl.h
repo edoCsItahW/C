@@ -302,4 +302,14 @@ typedef struct {
 
 extern M_LinkQueue LinkQueue;
 
+// -------------------------- Tree ---------------------------------
+
+typedef struct NodeT {
+    int value;
+    struct NodeT* left;
+    struct NodeT* right;
+} NodeT;
+
+NodeT* createNodeT(int value);
+
 #endif  // DATAFRAMEIMPL_DFIMPL_H

@@ -9,16 +9,13 @@
  * @file main.cpp
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
+ * @date 2024/11/08 下午1:33
  * @brief
- * @copyright CC BY-NC-SA
  * */
 
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
+#include "src/lexer.h"
+#include <iostream>
 
 int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
-    return 0;
+    std::cout << Token{TokenType::STRING, {1, 1}, "Hello, world!"} << std::endl;
 }

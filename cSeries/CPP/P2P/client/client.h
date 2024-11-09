@@ -20,8 +20,25 @@
 #include "../lib/proto.h"
 
 class Client {
+public:
+    explicit Client(ADDR_ARGS_DECL, const char* name = nullptr);
+    ~Client();
+    User getSelf();
+    [[nodiscard]] User getServer() const;
+    void run();
 private:
-
+    const char* usage = "你可以输入以下命令: \n命令: send [name] [msg]  向指定用户发送消息 \n命令: getuser  获取在线用户列表 \n命令: exit  退出程序";
+    Addr _addr;
+    std::string _name;
+    bool _ack;
+    Socket _sock;
+    User _self;
+    User _server;
+    Clients _clients;
+    void login();
+    void send(const std::string& name, const std::string& msg);
+    void handle(Msg<void*>& msg, const Addr& addr);
+    [[noreturn]] void listen();
 };
 
 #endif  // P2PSERVER_CLIENT_H

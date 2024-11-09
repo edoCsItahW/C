@@ -19,47 +19,41 @@
 
 int test_commonFunc(int a, int b) {
     std::cout << "Common function called." << std::endl;
+    throw std::runtime_error("Test exception");
     return a + b;
 }
 
-class Test {
-public:
+void test_voidFunc() {
+    std::cout << "Void function called." << std::endl;
+}
+
+struct Test {
     int memberFunc(int a) {
         std::cout << "Member function called." << std::endl;
+        throw std::runtime_error("Test exception");
         return a;
     }
-    static int staticFunc(int a) {
-        std::cout << "Static function called." << std::endl;
-        return a;
-    }
-    int privateRefFunc(int a) {
-        std::cout << "Private ref function called." << std::endl;
-        auto boundMethod = std::bind(&Test::privateFunc, this, std::placeholders::_1);
-        boundMethod(a);
-        return a;
-    }
-
-private:
-    int privateFunc(int a) {
-        std::cout << "Private function called." << std::endl;
+    int refFunc(int a) {
+        std::cout << "Reference function called." << std::endl;
+        dbg::Debugger ref(&Test::memberFunc);
+        ref(this, a);
         return a;
     }
 };
 
 /** @hiderefby */
 int main() {
-    using namespace debuger;
+    using namespace dbg;
 
-    Debuger decoratedFunction(test_commonFunc);
-    decoratedFunction(1, 2);
+    Debugger commonFunc(test_commonFunc);
+    commonFunc(1, 2);
 
     Test test;
 
-    auto memberBoundMethod = std::bind(&Test::memberFunc, &test, std::placeholders::_1);
-    memberBoundMethod(3);
+    Debugger memberFunc(std::bind(&Test::memberFunc, &test, std::placeholders::_1));
+    memberFunc(3);
 
-    auto staticBoundMethod = std::bind(&Test::staticFunc, std::placeholders::_1);
-    staticBoundMethod(4);
+    test.refFunc(4);
 
     return 0;
 }

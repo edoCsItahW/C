@@ -20,8 +20,10 @@
 #include <stdexcept>
 
 class SocketError : public std::runtime_error {
+private:
+
 public:
-    SocketError(const std::string& msg) : std::runtime_error(msg) {}
+    explicit SocketError(const std::string& msg): std::runtime_error("SocketError: " + msg) {}
 };
 
 #endif  // P2PSERVER_EXCEPTION_H

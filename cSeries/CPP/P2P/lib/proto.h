@@ -18,17 +18,28 @@
 #define C_PROTO_H
 #pragma once
 
+#include "debuger.h"
+#include "exception.h"
+#include <optional>
+#include <sstream>
 #include <string>
+#include <thread>
+#include <variant>
+#include <vector>
+#include <iostream>
+#include "winsock2.h"
+#include "ws2tcpip.h"
 
-#ifdef _WIN32
-    #include "winsock2.h"
-    #include "ws2tcpip.h"
-#else
-    #include "sys/socket.h"
-    #include "netinet/in.h"
-    #include "arpa/inet.h"
-    #include "unistd.h"
-#endif
+//#ifdef _WIN32
+//#else
+//    #include "arpa/inet.h"
+//    #include "netinet/in.h"
+//    #include "sys/socket.h"
+//    #include "unistd.h"
+//#endif
+
+#define ADDR_ARGS_DECL std::variant<std::string, u_long> ip = INADDR_ANY, short port = -1
+#define ADDR_ARGS std::variant<std::string, u_long> ip, short port
 
 /** @enum ServerFlag
  * @brief 服务端标志位枚举
@@ -37,15 +48,14 @@
  * */
 enum class ServerFlag {
     LOGIN = 1,  ///< 登录
-    LOGOUT,  ///< 登出
-    TRANS,  ///< 点对点通讯构建
-    GETUSERS,  ///< 获取在线用户列表
-    REDIRECT,  ///< 转发消息
+    LOGOUT,     ///< 登出
+    TRANS,      ///< 点对点通讯构建
+    GETUSERS,   ///< 获取在线用户列表
+    REDIRECT,   ///< 转发消息
     HEARTBEAT,  ///< 心跳包
-    ERROR_,  ///< 错误信息
-    NONE  ///< 无信息
+    ERROR_,     ///< 错误信息
+    NONE        ///< 无信息
 };
-
 
 /** @enum ClientFlag
  * @brief 客户端标志位枚举
@@ -54,14 +64,16 @@ enum class ServerFlag {
  * */
 enum class ClientFlag {
     MSG = 101,  ///< 消息
-    REQUEST,  ///< 穿孔请求
-    RESPONSE,  ///< 穿孔响应
-    TRASH,  ///< NAT穿透(垃圾信息)
-    GETUSERS,  ///< 获取在线用户列表
+    REQUEST,    ///< 穿孔请求
+    RESPONSE,   ///< 穿孔响应
+    TRASH,      ///< NAT穿透(垃圾信息)
+    GETUSERS,   ///< 获取在线用户列表
     HEARTBEAT,  ///< 心跳包
-    ERROR_,  ///< 错误信息
-    NONE  ///< 无信息
+    ERROR_,     ///< 错误信息
+    NONE        ///< 无信息
 };
+
+using Addr = std::pair<std::variant<std::string, u_long>, short int>;
 
 /** @struct User
  * @brief 用户信息结构体
@@ -73,17 +85,15 @@ struct User {
      * @brief 用户名
      * @details 客户端登录时发送的用户名
      * @invariant 自初始化后不应修改
-     * @qualifier const
      * */
-    const std::string name;
+    std::string name;
     /** @var addr
      * @public @memberof User
      * @brief 用户地址
      * @details 客户端登录时的网络地址
-     * @qualifier const
      * @note 地址格式为(ip, port)
      * */
-    const std::pair<std::string, short int> addr;
+    Addr addr;
     /**
      * @public @memberof User
      * @brief 字符串化用户信息
@@ -99,7 +109,7 @@ struct User {
      * @param other 另一个用户
      * @return 两个用户是否相同
      * */
-    bool operator==(const User& other);
+    bool operator==(const User& other) const;
     /**
      * @brief 输出用户信息到流
      * @public @memberof User
@@ -107,14 +117,14 @@ struct User {
     friend std::ostream& operator<<(std::ostream& os, const User& user);
 };
 
-
 /** @struct Msg
  * @brief 消息结构体
  * @details 用于存储消息信息,并在端间传递
  * @tparam T 消息数据类型
  * */
-template<typename T>
+template<typename T = void*>
 struct Msg {
+    using Flag = std::variant<ServerFlag, ClientFlag>;
     /** @var flag
      * @public @memberof Msg
      * @brief 消息标志位
@@ -123,7 +133,7 @@ struct Msg {
      * @remark 初始值为 @ref ServerFlag::NONE
      * @see ServerFlag
      * */
-    ServerFlag flag = ServerFlag::NONE;
+    Flag flag = ServerFlag::NONE;
     /** @var data
      * @public @memberof Msg
      * @brief 消息数据
@@ -137,18 +147,24 @@ struct Msg {
      * @details 用于存储消息发送者信息
      * @see User
      * */
-    User& sender;
+    User sender;
     /** @var receiver
      * @public @memberof Msg
      * @brief 消息接收者
      * @details 用于存储消息接收者信息
      * @see User
      * */
-    User& receiver;
+    User receiver;
+    [[nodiscard]] char* serialize() const;
+    static Msg<T> deserialize(const char* data);
 };
 
+template<typename... Args>
+char* serialize(Args&&... args);
 
 void initWinsock();
+
+sockaddr_in createAddr(ADDR_ARGS_DECL);
 
 class Socket {
 private:
@@ -181,7 +197,9 @@ public:
      * @param ip 目标地址
      * @param port 目标端口
      * */
-    void bind(const sockaddr_in& addr) const;
+    void bind(ADDR_ARGS_DECL) const;
+
+    void bind(const Addr& addr) const;
     /**
      * @brief 发送数据到指定地址
      * @details 用于发送数据到指定地址
@@ -191,16 +209,27 @@ public:
      * @tparam T 消息数据类型
      * */
     template<typename T>
-    void sendTo(const Msg<T>& msg, const std::string& ip, short int port);
+    void sendTo(const Msg<T>& msg, ADDR_ARGS_DECL);
 
     template<typename T>
-    std::pair<Msg<T>, sockaddr_in> recvFrom(size_t bufSize = 1024);
+    void sendTo(const Msg<T>& msg, Addr);
 
     template<typename T>
-    T serialize(const Msg<T>& msg);
+    std::pair<std::optional<Msg<T>>, std::optional<Addr>> recvFrom(int bufSize = 1024, bool wait = true);
 
-    template<typename T>
-    Msg<T> deserialize(const std::string& data);
+    void close() const;
 };
+
+struct Clients : public std::vector<User> {
+    std::optional<User> operator[](const std::string& name) const;
+    void push_back(const User& user);
+    Clients& operator=(const Clients& other);
+    Clients& operator=(Clients&& other) noexcept;
+    Clients& operator=(Clients* other);
+};
+
+std::vector<std::string> split(const std::string& str, char delimiter);
+
+#include "proto.hpp"
 
 #endif  // C_PROTO_H

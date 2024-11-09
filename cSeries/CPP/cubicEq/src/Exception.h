@@ -6,19 +6,28 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /**
- * @file main.cpp
+ * @file Exception.h
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
+ * @date 2024/11/07 下午6:46
  * @brief
- * @copyright CC BY-NC-SA
  * */
+#ifndef CUBICEQ_EXCEPTION_H
+#define CUBICEQ_EXCEPTION_H
+#pragma once
 
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
+#include <stdexcept>
 
-int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
-    return 0;
-}
+class Exception : public std::runtime_error {
+public:
+    Exception(const std::string& message)
+        : std::runtime_error(message) {}
+};
+
+class TypeError : public Exception {
+public:
+    TypeError(const std::string& message)
+        : Exception(message) {}
+};
+
+#endif  // CUBICEQ_EXCEPTION_H

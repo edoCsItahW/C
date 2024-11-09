@@ -6,19 +6,21 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /**
- * @file main.cpp
+ * @file mathUtils.h
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
+ * @date 2024/11/07 下午5:01
  * @brief
- * @copyright CC BY-NC-SA
  * */
+#ifndef CUBICEQ_MATHUTILS_H
+#define CUBICEQ_MATHUTILS_H
+#pragma once
 
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
+/** @brief 计算最大公约数
+ * @param a 第一个整数
+ * @param b 第二个整数
+ * @return 最大公约数
+ * */
+int gcd(int a, int b);
 
-int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
-    return 0;
-}
+#endif  // CUBICEQ_MATHUTILS_H

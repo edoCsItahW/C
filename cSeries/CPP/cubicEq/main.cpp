@@ -9,16 +9,15 @@
  * @file main.cpp
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
+ * @date 2024/11/07 下午5:37
  * @brief
- * @copyright CC BY-NC-SA
  * */
-
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
+#include "src/types.h"
+#include <iostream>
 
 int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
+    LATEX_OUTPUT = true;
+    auto frac = Fraction::fromDecimal(1.2);
+    std::cout << frac * 3 << std::endl;
     return 0;
 }

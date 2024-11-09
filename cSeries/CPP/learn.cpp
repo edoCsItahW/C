@@ -1154,7 +1154,7 @@ int main() {
 // 可变lambda
 // [&x]() mutable { return ++x; }
 
-// bind函数
+// bind函数(std::bind 位于 functional 头文件中)
 // 接受一个可调用对象和一组参数,返回一个新的可调用对象,该对象包装了原可调用对象,并绑定了参数.
 // bind(func, arg1, arg2, ...)
 // 类似python中的partial函数
@@ -1444,7 +1444,6 @@ int main() {
  ClassName& operator=(const ClassName& other) {
 
  }
-// TODO: 至此
  */
 
 // 合成拷贝运算符
@@ -2617,3 +2616,127 @@ void my_erase2(auto &x) {
 auto c {U'\N{LATIN CAPITAL LETTER A}'};
 
 // 行拼接符\前的空白字符
+
+// 两阶段编译检查
+/*
+ * 在实例化模板的时候，如果模板参数类型不支持所有模板中用到的操作符，将会遇到编译期
+错误。比如：
+std::complex<float> c1, c2; // std::complex<>没有提供小于运算符
+…
+    ::max(c1,c2); // 编译期 ERROR
+但是在定义的地方并没有遇到错误提示。这是因为模板是被分两步编译的：
+1. 在模板定义阶段，模板的检查并不包含类型参数的检查。只包含下面几个方面：
+ 语法检查。比如少了分号。
+ 使用了未定义的不依赖于模板参数的名称（类型名，函数名，......）。
+ 未使用模板参数的 static assertions。
+    2. 在模板实例化阶段，为确保所有代码都是有效的，模板会再次被检查，尤其是那些依赖
+        五车书馆
+    6
+    于类型参数的部分。
+        比如：
+    template<typename T>
+    void foo(T t)
+{
+    undeclared(); // 如果 undeclared()未定义，第一阶段就会报错，因为与模板参
+    数无关
+    undeclared(t); //如果 undeclared(t)未定义，第二阶段会报错，因为与模板参
+    数有关
+    static_assert(sizeof(int) > 10,"int too small"); // 与模板参数无关，
+    总是报错
+    static_assert(sizeof(T) > 10, "T too small"); //与模板参数有关，只会
+    在第二阶段报错
+}
+名称被检查两次这一现象被称为“两阶段查找”，在 14.3.1 节中会进行更细致的讨论。
+    需要注意的是，有些编译器并不会执行第一阶段中的所有检查。因此如果模板没有被至少实
+    例化一次的话，你可能一直都不会发现代码中的常规错误。
+*/
+
+// 类型推断中的类型转换
+/**
+ * @code
+ * template<typename T>
+ * T max(T a, T b) {};
+ *
+ * const int c = 1;
+ * int i = 1;
+ * max(i, c);  // T被判断为int, c中的const被decay(退化)掉
+ * max(c, c);  // T被判断为int
+ * int& r = i;
+ * max(i, r);  // T被判断为int, r中的引用被decay掉
+ * int arr[4];
+ * max(&i, arr);  // T被判断为int*
+ * // 但这样
+ * std::string s;
+ * max("foo", s);  // 是错误的,不确定T是const [4]还是std::string
+ * */
+
+// 对默认调用参数的类型推断
+/**
+ * 需要注意的是，类型推断并不适用于默认调用参数。例如：
+ * @code
+ * template<typename T>
+ * void f(T = "");
+ * ...
+ * f(1); // OK: T 被推断为 int, 调用 f<int> (1)
+ * f(); // ERROR: 无法推断 T 的类型
+ * @endcode
+ * 为应对这一情况，你需要给模板类型参数也声明一个默认参数，1.4 节会介绍这一内容：
+ * @code
+ * template<typename T = std::string>
+ * void f(T = ""); …
+ * f(); // OK
+ * @endcode
+ * */
+
+// 返回类型推断
+/**
+ * 如果返回类型是由模板参数决定的，那么推断返回类型最简单也是最好的办法就是让编译器
+ * 来做这件事。从 C++14 开始，这成为可能，而且不需要把返回类型声明为任何模板参数类型
+ * （不过你需要声明返回类型为 auto）：
+ * @code
+ * template<typename T1, typename T2>
+ * auto max (T1 a, T2 b) {  return b < a ? a : b; }
+ * @endcode
+ *
+ * 但是在某些情况下会有一个严重的问题：由于 T 可能是引用类型，返回类型就也可能被推断
+ * 为引用类型。因此你应该返回的是 decay 后的 T，像下面这样：
+ * @code
+ * #include <type_traits>
+ * template<typename T1, typename T2>
+ * auto max (T1 a, T2 b) -> typename std::decay<decltype(true? a:b)>::type {
+ *     return b < a ? a : b;
+ * }
+ * @endcode
+ * 在这里我们用到了类型萃取（type trait）std::decay<>，它返回其 type 成员作为目标类型，
+ * 定义在标准库<type_trait>中（参见 D.5）。由于其 type 成员是一个类型，为了获取其结果，
+ * 需要用关键字 typename修饰这个表达式。
+ * */
+
+// 将返回类型声明为公共类型（Common Type）
+/**
+ * 从 C++11 开始，标准库提供了一种指定“更一般类型”的方式。std::common_type<>::type
+ * 产生的类型是他的两个模板参数的公共类型。比如：
+ * @code
+ * #include <type_traits>
+ * template<typename T1, typename T2>
+ * std::common_type_t<T1,T2> max (T1 a, T2 b) {
+ *     return b < a ? a : b;
+ * }
+ * @endcode
+ * 同样的，std::common_type 也是一个类型萃取（type trait），定义在<type_traits>中，它返
+ *     回一个结构体，结构体的 type 成员被用作目标类型。因此其主要应用场景如下：
+ *     typename std::common_type<T1,T2>::type //since C++11
+ *         不过从 C++14 开始，你可以简化“萃取”的用法，只要在后面加个_t，就可以省掉 typename
+ *     和::type（参见 2.8 节），简化后的版本变成：
+ *         std::common_type_t<T1,T2> // equivalent since C++1
+ * */
+
+// 在C++中，typename关键字用于指示编译器某个名字是一个类型。这在模板编程中特别重要，因为在某些上下文中，编译器无法确定一个名字是类型还是其他东西（比如变量或函数）。
+//
+// 在你提到的例子中，std::common_type<T1, T2>::type是一个类型成员。如果不显式使用typename，编译器可能会认为std::common_type<T1, T2>::type是一个非类型的成员（例如，变量或函数），这会导致编译错误。因此，需要使用typename来明确告诉编译器，std::common_type<T1, T2>::type是一个类型。
+//
+// 例如，正确的写法是：
+//
+// typename std::common_type<T1, T2>::type
+// CopyInsert
+// 如果省略typename，就会导致编译器产生错误，因为它无法解析std::common_type<T1, T2>::type。这是C++模板编程中的一个常见语法规则。

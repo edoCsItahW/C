@@ -6,19 +6,14 @@
 // permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 /**
- * @file main.cpp
+ * @file mathUtils.cpp
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
+ * @date 2024/11/07 下午5:01
  * @brief
- * @copyright CC BY-NC-SA
  * */
+#include "mathUtils.h"
 
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
-
-int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
-    return 0;
+int gcd(int a, int b) {
+    return b == 0? a : gcd(b, a % b);
 }

@@ -6,6 +6,5 @@ set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
-        test.c
         main.c
 )

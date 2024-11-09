@@ -9,16 +9,9 @@
  * @file main.cpp
  * @author edocsitahw
  * @version 1.1
- * @date 2024/10/20 下午8:56
- * @brief
- * @copyright CC BY-NC-SA
+ * @date 2024/10/23 下午4:50
+ * @brief 计算机与程序设计笔记示例文件
+ * @copyright CC BY-NC-SA 2024. All rights reserved.
  * */
 
-#include "client.h"
-#pragma comment(lib, "ws2_32.lib")
-
-int main() {
-    Client client("127.0.0.1", 5000, "pc");
-    client.run();
-    return 0;
-}
+#include "main.h"

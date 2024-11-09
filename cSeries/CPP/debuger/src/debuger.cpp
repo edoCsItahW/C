@@ -14,3 +14,8 @@
  * */
 
 #include "debuger.h"
+
+namespace dbg {
+    bool First = true;
+    bool DEBUG = false;
+}

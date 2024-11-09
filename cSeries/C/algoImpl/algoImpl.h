@@ -37,10 +37,14 @@ int partition(int arr[], int left, int right);
 
 /** @brief 快速排序
  *
- * @example
- *      int arr[] = {5, 2, 8, 3, 9, 1}; \n
- *      int n = sizeof(arr) / sizeof(arr[0]); \n
- *      quickSort(arr, 0, n - 1);
+ * ## 示例
+ * @code
+ * int arr[] = {5, 2, 8, 3, 9, 1}; \n
+ * int n = sizeof(arr) / sizeof(arr[0]); \n
+ * quickSort(arr, 0, n - 1);
+ * @endcode
+ *
+ * @remark 快速排序以某个元素为界将大于它和小于它的关键字划分为两个子序列,再将改元素放在中间
  *
  * @param arr 待排序数组
  * @param left 左边界
@@ -84,6 +88,8 @@ void bubbleSort(int arr[], int n);
  *      2. 然后5(上一个等式结果) / 2 = 2,那么有2组,对每组中的5个进行插排   \n
  *      3. 最后2(上一个等式结果) / 2 = 1,那么有1组,对每组中的10个进行插排(此时数组已经大致有序了,符合插排的越有序越快的特点)   \n
  *
+ * @remark 希尔排序第1趟结束后,形成若干个有序的子序列
+ *
  * @param arr 待排序数组
  * @param n 数组长度
  * */
@@ -108,17 +114,19 @@ void shellSort(int arr[], int n);
 void insertSort(int arr[], int n);
 
 /** @brief 选择排序
- *
- * @example
- *      int arr[] = {5, 2, 8, 3, 9, 1}; \n
- *      int n = sizeof(arr) / sizeof(arr[0]); \n
- *      selectionSort(arr, n);
- *
  * @details
- *      1. 直接选择排序思考非常好理解,但是效率不是很好.实际中很少使用
- *      2. 时间复杂度: O(N^2)
- *      3. 空间复杂度: O(1)
- *      4. 稳定性: 不稳定
+ * 1. 直接选择排序非常好理解,但是效率不是很好.实际中很少使用
+ * 2. 时间复杂度: O(N^2)
+ * 3. 空间复杂度: O(1)
+ * 4. 稳定性: 不稳定
+ *
+ * ## 示例
+ * @code
+ * int arr[] = {5, 2, 8, 3, 9, 1};
+ * int n = sizeof(arr) / sizeof(arr[0]);
+ * selectionSort(arr, n);
+ * @endcode
+ * @remark 选择排序在每趟结束后可以确定一个元素的最终位置,则第一趟后最小值应该在第1个位置.
  *
  * @param arr 待排序数组
  * @param n 数组长度
@@ -145,7 +153,6 @@ void heapify(int arr[], int n, int i);
 void heapSort(int arr[], int n);
 
 /** @brief 归并排序
- *
  * @param arr 待排序数组
  * @param left 左边界
  * @param mid 中间位置
@@ -154,11 +161,15 @@ void heapSort(int arr[], int n);
 void merge(int arr[], int left, int mid, int right);
 
 /** @brief 归并排序
+ * @details
+ * ## 示例
+ * @code
+ * int arr[] = {5, 2, 8, 3, 9, 1};
+ * int n = sizeof(arr) / sizeof(arr[0]);
+ * mergeSort(arr, 0, n - 1);
+ * @endcode
  *
- * @example
- *      int arr[] = {5, 2, 8, 3, 9, 1}; \n
- *      int n = sizeof(arr) / sizeof(arr[0]); \n
- *      mergeSort(arr, 0, n - 1);
+ * @remark 归并排序第1趟结束后,形成若干个有序的子序列
  *
  * @param arr 待排序数组
  * @param left 左边界

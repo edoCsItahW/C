@@ -143,8 +143,7 @@
       socklen_t addr_len = sizeof(client_addr);
       char buffer[1024];
       
-      ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer), 0, 
-                           (struct sockaddr *)&client_addr, &addr_len);
+      ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &addr_len);
       if (n < 0) {
           std::cerr << "Error in recvfrom" << std::endl;
       } else {
@@ -159,8 +158,7 @@
       int addr_len = sizeof(client_addr);
       char buffer[1024];
       
-      int n = recvfrom(sockfd, buffer, sizeof(buffer), 0, 
-                       (struct sockaddr *)&client_addr, &addr_len);
+      int n = recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &addr_len);
       if (n == SOCKET_ERROR) {
           std::cerr << "Error in recvfrom" << std::endl;
       } else {
@@ -168,3 +166,42 @@
           std::cout << "Received: " << buffer << std::endl;
       }
       ```
+
+7. **使用 `sendto` 发送数据**：
+    * Linux
+        ```c++
+        struct sockaddr_in dest_addr;
+        memset(&dest_addr, 0, sizeof(dest_addr));
+        dest_addr.sin_family = AF_INET;
+        dest_addr.sin_port = htons(8080); // 目的地端口
+        dest_addr.sin_addr.s_addr = inet_addr("192.168.1.1"); // 目的地IP
+        
+        const char *message = "Hello, World!";
+        ssize_t n = sendto(sockfd, message, strlen(message), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+        if (n < 0) {
+        std::cerr << "Error in sendto" << std::endl;
+        }
+        ```
+    
+    * Windows
+        ```c++
+        SOCKET sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+        if (sockfd == INVALID_SOCKET) {
+            std::cerr << "Error opening socket" << std::endl;
+            WSACleanup();
+            return -1;
+        }
+        
+        // 设置目的地地址
+        struct sockaddr_in dest_addr;
+        memset(&dest_addr, 0, sizeof(dest_addr));
+        dest_addr.sin_family = AF_INET;
+        dest_addr.sin_port = htons(8080); // 目的地端口
+        dest_addr.sin_addr.s_addr = inet_addr("192.168.1.1"); // 目的地IP
+        
+        const char *message = "Hello, World!";
+        int n = sendto(sockfd, message, strlen(message), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+        if (n == SOCKET_ERROR) {
+            std::cerr << "Error in sendto" << std::endl;
+        }
+        ```

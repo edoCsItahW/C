@@ -16,15 +16,15 @@
 
 #include "proto.h"
 #include "exception.h"
+#include <algorithm>
 #include <iostream>
 
 std::string User::toStr() const {
-    return "[" + name + ": <" + addr.first + ":" + std::to_string(addr.second) + ">]";
+    return "[" + name + ": <" + (std::holds_alternative<std::string>(addr.first) ? std::get<std::string>(addr.first) : std::to_string(std::get<u_long>(addr.first))) + ":" + std::to_string(addr.second)
+        + ">]";
 }
 
-bool User::operator==(const User &other) {
-    return name == other.name && addr == other.addr;
-}
+bool User::operator==(const User &other) const { return name == other.name && addr == other.addr; }
 
 /**
  * @details 输出类似于`[Alice: <127.0.0.1:8080>]`的字符串
@@ -41,13 +41,23 @@ std::ostream &operator<<(std::ostream &os, const User &user) {
 
 void initWinsock() {
     WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-        throw SocketError("WSAStartup failed");
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) throw SocketError("WSAStartup failed");
+}
+
+sockaddr_in createAddr(ADDR_ARGS) {
+    sockaddr_in addr{.sin_family = AF_INET};
+    if (port >= 0) addr.sin_port = htons(port);
+    if (std::holds_alternative<std::string>(ip))
+        addr.sin_addr.s_addr = inet_addr(std::get<std::string>(std::move(ip)).c_str());
+    else
+        addr.sin_addr.s_addr = std::get<u_long>(ip);
+    return addr;
 }
 
 Socket::Socket(int family, int type) {
+    dbg::Debugger dbgInit(initWinsock);
+    dbgInit();
     sockfd = socket(family, type, 0);
-    initWinsock();
     if (sockfd == INVALID_SOCKET) {
         WSACleanup();
         throw SocketError("create socket failed");
@@ -59,25 +69,51 @@ Socket::~Socket() {
     WSACleanup();
 }
 
-void Socket::bind(const sockaddr_in &addr) const {
-    if (::bind(sockfd, (SOCKADDR*)&addr, sizeof(addr)) < 0)
-        throw SocketError("bind failed");
+std::vector<std::string> split(const std::string &str, const char delimiter) {
+    std::vector<std::string> result;
+    std::stringstream ss(str);
+    std::string item;
+    while (std::getline(ss, item, delimiter)) result.push_back(item);
+    return result;
 }
 
-template<typename T>
-void Socket::sendTo(const Msg<T> &msg, const std::string &ip, short port) {
-    sendto(sockfd, )
+void Socket::bind(ADDR_ARGS) const {
+    auto addr = createAddr(std::move(ip), port);
+    if (::bind(sockfd, (SOCKADDR *)&addr, sizeof(addr)) < 0) throw SocketError("bind failed");
 }
 
-template<typename T>
-std::pair<Msg<T>, sockaddr_in> Socket::recvFrom(size_t bufSize) {
-    char buf[bufSize];
-    sockaddr_in addr{};
-    int len = sizeof(addr);
-    if (recvfrom(sockfd, buf, bufSize, 0, (SOCKADDR*)&addr, &len) < 0)
-        throw SocketError("recvfrom failed");
-    return std::make_pair(Msg<T>(buf), addr);
+void Socket::bind(const Addr &addr) const {
+    dbg::Debugger dbgBind([this](ADDR_ARGS) { bind(std::move(ip), port); });
+    dbgBind(addr.first, addr.second);
 }
 
-template<typename T>
-T Socket::serialize(const Msg<T> &msg) {}
+void Socket::close() const {
+    closesocket(sockfd);
+    WSACleanup();
+}
+
+std::optional<User> Clients::operator[](const std::string &name) const {
+    for (const auto &client : *this)
+        if (client.name == name) return client;
+    return std::nullopt;
+}
+
+void Clients::push_back(const User &user) {
+    if (std::any_of(begin(), end(), [&user](const User &other) { return user == other; })) throw std::runtime_error("user already exists");
+    std::vector<User>::push_back(user);
+}
+
+Clients &Clients::operator=(const Clients &other) {
+    if (this != &other) std::vector<User>::operator=(other);
+    return *this;
+}
+
+Clients &Clients::operator=(Clients &&other) noexcept {
+    if (this != &other) std::vector<User>::operator=(std::move(other));
+    return *this;
+}
+
+Clients &Clients::operator=(Clients *other) {
+    if (this != other) std::vector<User>::operator=(*other);
+    return *this;
+}

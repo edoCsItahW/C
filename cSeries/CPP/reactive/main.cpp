@@ -14,6 +14,7 @@
  *******************************************************/
 
 #include "src/reactive.h"
+#pragma once
 
 int main() {
     auto ref = Ref<int>(1);
