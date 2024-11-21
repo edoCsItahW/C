@@ -24,6 +24,11 @@
  * @page Latex EBNF 上下文无关文法
  * @section Latex_EBNF
  * @code{.ebnf}
+ * <Block> ::= <String> | <Command> | <Environment> | <Comment>
+ * <String> ::= ".*?"
+ * <Command> ::= \ <Name> [ [ <Parameter> ] ]* '{' [ <Block> ]* '}'
+ * <Environment> ::= \begin{<Name>} [ <Block> ]* \end{<Name>}
+ * <Comment> ::= %.*?\n
  * @endcode
  * */
 
@@ -37,6 +42,10 @@ template<typename T> requires std::is_enum_v<T>
 constexpr auto enumToStr(T value);
 
 enum class TokenType {
+    STRING,
+    COMMAND,
+    ENVIRONMENT,
+    COMMENT,
     UNKNOWN
 };
 
@@ -56,7 +65,10 @@ private:
     size_t _line;
     size_t _col;
     void skip();
-    Token extract
+    Token extractString();
+    Token extractCommand();
+    Token extractEnvironment();
+    Token extractComment();
 
 public:
     explicit Lexer(std::string text);

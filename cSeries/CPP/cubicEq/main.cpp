@@ -18,6 +18,6 @@
 int main() {
     LATEX_OUTPUT = true;
     auto frac = Fraction::fromDecimal(1.2);
-    std::cout << frac * 3 << std::endl;
+    std::cout << frac * 3.3 << std::endl;
     return 0;
 }

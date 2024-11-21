@@ -152,8 +152,3 @@ Exponential::Exponential(Number base, Number exponent) {
         throw TypeError("Unsupported type for exponent.");
 }
 
-std::string Exponential::toString() const {
-    std::string baseStr;
-    if (std::holds_alternative<int>(_base))
-        if
-    return LATEX_OUTPUT ? }
