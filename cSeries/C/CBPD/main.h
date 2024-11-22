@@ -31,6 +31,7 @@
  * @subpage chapter1
  *     - @ref ch1_1
  *     - @ref ch1_2
+ *     - @ref ch1_3
  *
  * @subpage chapter2
  *     - @ref ch2_1
@@ -48,6 +49,11 @@
  * @subpage chapter12
  *     - @ref ch12_1
  *     - @ref ch12_2
+ *     - @ref ch12_3
+ *     - @ref ch12_4
+ *
+ * @subpage chapter13
+ *     - @ref ch13_1
  * */
 
 // 第一章
@@ -59,10 +65,11 @@
  * @section ch1_1 计算机与程序、程序设计语言
  *
  * @subsection ch1_1_1 程序设计语言
- * 1. 机器语言  \n
+ *
+ * @subsubsection ch1_1_1_1 1. 机器语言
  * 由0、1二进制代码组成的能被机器直接理解、执行的指令集合。 @c 机器语言是计算机唯一能够直接执行的语言。
  *
- * 2. 汇编语言  \n
+ * @subsubsection ch1_1_1_2 2. 汇编语言
  * 汇编语言采用一定的助记符来替代机器语言中的指令和数据。
  * 将汇编语言源程序转换为等价的目标程序的过程称为汇编。
  * <span style="color: red">我们把机器语言和汇编语言统称为低级语言。</span>
@@ -80,7 +87,7 @@
  * }
  * @enddot
  *
- * 3. 高级语言   \n
+ * @subsubsection ch1_1_1_3 3. 高级语言
  * 翻译程序有两种工作方式:解释方式和编译方式。
  *     * 解释:  \n
  *          解释程序对源程序是一边翻译一边执行,不产生目标程序.
@@ -163,17 +170,18 @@
  *
  * @subsection ch2_1_1 数据的存储单位和地址
  *
- * 1. 位(bit, b):  \n
+ *　@subsubsection　ch2_1_1_1_1 1. 位(bit, b):
  * 每一个二极管元件成为一个"二进制位",是计算机存储信息的最小单位。
  *
- * 2. 字节(byte, B):  \n
+ * @subsubsection ch2_1_1_1_2 2. 字节(byte, B):
  * 计算机中,通常将8个二进制位作为一个字节,即1B=8b。是计算机存储信息的基本单位。
  *
- * 3. 地址:  \n
+ * @subsubsection ch2_1_1_1_3 3. 地址:
  * ...
  *
  * @subsection ch2_1_2 不同类型数据的存储方式
- * 1. 整数类型:  \n
+ *
+ * @subsubsection ch2_1_2_1 1. 整数类型:
  * 十进制整数7以二进制形式用1字节进行存储时,存储单元如下:
  *
  * @$
@@ -207,7 +215,7 @@
  *
  * @subsection ch10_1_1 文件和文件名
  *
- * 1. 文件:  \n
+ * @subsubsection ch10_1_1_1 1. 文件:
  *     在C语言程序设计中,主要有两种文件:
  *
  *     1. **程序文件**: 包括源程序文件(.c),目标文件(.obj),可执行文件(.exe)等。
@@ -215,10 +223,10 @@
  *
  *     输入输出数据流的开始和结束仅受程序控制而不受物理符合(如回车换行)控制,这种文件称为@b 流式文件
  *
- * 2. 文件名:  \n
+ * @subsubsection ch10_1_1_2 2. 文件名:  \n
  *     一个文件要有一个唯一的文件标识.文件名包括:(1)文件路径,(2)文件名主干,(3)文件扩展名。
  *
- * 3. 数据文件的分类:  \n
+ * @subsubsection ch10_1_1_3 3. 数据文件的分类:  \n
  *
  *     根据数据的组织形式,数据文件可分为@b ASCII文件 和@b 二进制文件 .
  *
@@ -344,16 +352,16 @@
  *
  * @subsection ch11_1_1 常用术语
  *
- * 1. @b 数据:  \n
+ * @subsubsection ch11_1_1_1 1. 数据
  *     数据(Data)是客观事物的符号表示,是所有能输入计算机中并被计算机程序处理的对象.
  *
- * 2. @b 数据元素:  \n
+ * @subsubsection ch11_1_1_2 2. 数据元素
  *     数据元素(Data Element)是数据的基本单位,有时也称为元素、记录等.
  *
- * 3. @b 数据项:  \n
+ * @subsubsection ch11_1_1_3 3. 数据项
  *     数据项(Data Item)是组成数据元素的、有独立含义的、不可分割的最小单位。
  *
- * 4. @b 数据对象:  \n
+ * @subsubsection ch11_1_1_4 4. 数据对象
  *     数据对象(Data Object)是具有相同性质的数据元素的集合,是数据的一个子集.
  *
  * @subsection ch11_1_2 数据结构
@@ -374,7 +382,7 @@
  * \end{cases}
  * @$  \n
  *
- * 1. @b逻辑结构:  \n
+ * @subsubsection ch11_1_2_1 1. 逻辑结构
  *     逻辑结构是从逻辑上描述数据结构,它与数据的存储无关,是独立于计算机的.
  *
  *     其包括:
@@ -390,7 +398,7 @@
  *     线性结构包括线性表、栈、队列、字符串、数组、广义表等.
  *     非线性结构包括树、二叉树、有向图和无向图等.
  *
- * 2. @b 存储结构:  \n
+ * @subsubsection ch11_1_2_2 2. 存储结构
  *     数据对象在计算机中的存储方式称为 @b 存储结构 ,也称为 @b 物理结构.
  *     数据元素在计算机中有两种存储结构:
  *     - 顺序存储结构:  \n
@@ -401,10 +409,10 @@
  *
  * @subsection ch11_2_1 基本数据类型
  *
- * 1. @b 数据类型:  \n
+ * @subsubsection ch11_2_1_1 1. 数据类型
  *     在程序设计语言中,每一个数据都属于某种数据类型。类型明显或隐含地规定了数据的取值范围、存储方式以及允许进行的运算,@b 数据类型 是一个值的集合和定义在这个集合上的一组操作的总称.
  *
- * 2. @b 抽象数据类型:  \n
+ * @subsubsection ch11_2_1_2 2. 抽象数据类型:
  *     抽象数据类型(Abstract Data Type, ADT)一般指由用户定义的、表示应用问题的数学模型,以及定义在该模型上的一组操作的总称,具体包括3个部分: 数据对象,数据对象上的关系的集合又及对数据对象的基本操作的集合.
  *
  * @subsection ch11_2_2 抽象数据类型的实现
@@ -445,10 +453,10 @@
  *
  * @subsection ch12_2_1 顺序表定义及地址计算
  *
- * 1. 顺序表的定义:  \n
+ * @subsubsection ch12_1_1_1 1. 顺序表的定义
  *     线性表的顺序表示指的是用一组地址连续的存储单元依次存储线性表的数据元素,这种表示也称为线性表的顺序存储结构.
  *
- * 2. 地址的计算方法:  \n
+ * @subsubsection ch12_1_1_2 2. 地址的计算方法
  * 假设线性表的每个元素需要占用l个存储单元,并以所占的第一个单元的存储地址作为数据元素的存储起始位置.则线性表中第i + 1个数据元素的存储位置\$ LOC(a_{i + 1}) \$ 和第i个数据元素的位置\$ LOC(a_i) \$之间满足下列关系:  \n
  *     @$
  *     LOC(a_{i + 1}) = LOC(a_i) + l
@@ -470,7 +478,7 @@
  * \end{array}
  * @$  \n
  *
- * 3. 顺序表类型定义:  \n
+ * @subsubsection ch12_1_1_3 3. 顺序表类型定义
  * 通常用数组来描述数据结构中的顺序存储结构.
  * @code{c}
  * // -------------- 顺序表的存储结构 ----------------
@@ -484,7 +492,7 @@
  *
  * @subsection ch12_2_2 顺序表的基本操作
  *
- * 1. 初始化:  \n
+ * @subsubsection ch12_2_2_1 1. 初始化
  *     顺序表的初始化操作就是构造一个空的顺序表
  *
  *     @code{c}
@@ -496,7 +504,7 @@
  *     }
  *     @endcode
  *
- * 2. 取值:  \n
+ * @subsubsection ch12_2_2_2 2. 取值
  *     取值操作是根据指定的位置序号i,获取顺序表中的第i个数据元素的值.
  *
  *     @code{c}
@@ -509,7 +517,7 @@
  *
  *     且显然,取值操作的时间复杂度为O(1).
  *
- * 3. 查找:  \n
+ * @subsubsection ch12_2_2_3 3. 查找
  *     查找操作是根据指定的元素e,查找顺序表中第1个与e相等的元素。若查找成功,则返回该元素在表中的位置序号;若查找失败则返回0.
  *
  *     @code{c}
@@ -532,7 +540,7 @@
  *
  *     由此可见,顺序表按值查找的平均时间复杂度为O(n).
  *
- * 4. 插入:  \n
+ * @subsubsection ch12_2_2_4 4. 插入
  *     线性表的插入操作时指在表的第i(\$ 1 \leqslant i \leqslant n+1 \$)个位置插入一个新的元素e,使长度为n的线性表变为长度为n + 1的线性表.
  *
  *     @code{c}
@@ -559,7 +567,7 @@
  *
  *     由此可见,顺序表的插入算法的平均时间复杂度为O(n).
  *
- * 5. 删除:  \n
+ * @subsubsection ch12_2_2_5 5. 删除
  *     线性表的删除操作是指将表的第i个元素删去,将长度为n - 1的线性表.
  *
  *     @code{c}
@@ -587,7 +595,7 @@
  *
  * @subsection ch12_3_1 单链表
  *
- * 1. 单链表的定义与表示:  \n
+ * @subsubsection ch12_3_1_1 1. 单链表的定义与表示
  *
  * n个结点链接成一个链表即为线性表的链式存储结构.线性表的存储结构的特点是:用一组任意的存储单元存储线性表的数据元素,这组存储单元可以是连续的,也可以是离散的.单链表的节点可以包括两个域: 数据域用于存储数据元素;指针域用于存储直接后继的存储位置,指针域中存储的信息称作指针或链,单链表的每个结点中只包含一个指针域.
  *
@@ -605,8 +613,8 @@
  * }
  * @endcode
  *
- * 2. 单链表的基本操作 :  \n
- *     - 初始化:  \n
+ * @subsubsection ch12_3_1_1 2. 单链表的基本操作
+ *     1. 初始化:  \n
  *         1. 生成新的结点作为头结点,用头指针L指向头结点
  *         2. 头结点的指针域置空
  *         @code{c}
@@ -617,7 +625,7 @@
  *         }
  *         @endcode
  *
- *     - 取值:  \n
+ *     2. 取值:  \n
  *         1. 用指针P指向首元结点,用j做计数器,初值赋1
  *         2. 从首元结点开始依次顺着链域next逐个结点向下访问,只要指向当前结点的指针p不为空(NULL),并且没有到达序号为i的结点,则循环执行以下操作:
  *             - p指向下一个结点
@@ -642,7 +650,7 @@
  *         @$  \n
  *         由此可见,单链表按值查找的平均时间复杂度为O(n).
  *
- *     - 查找:  \n
+ *     3. 查找:  \n
  *         1. 用指针P指向首元结点
  *         2. 从首元结点开始依次顺着链域next向下查找,只要指向当前结点的指针p不为空,并且p所指结点的数据域不等于给定值e,则循环执行操作:p指向下一个结点
  *         3. 返回p
@@ -655,7 +663,7 @@
  *         @endcode
  *         复杂度也为O(n).
  *
- *     - 插入:  \n
+ *     4. 插入:  \n
  *         1. 查找结点\$ a_{i - 1} \$并由指针p指向该结点
  *         2. 生成一个新结点*s
  *         3. 将新结点*s的数据域置为e
@@ -676,6 +684,364 @@
  *             return OK;
  *         }
  *         @endcode
+ *     5. 删除:  \n
+ *         1. 查找结点\$ a_{i - 1} \$并由指针p指向该结点
+ *         2. 临时保存待删除结点\$ a_i \$的地址在q中,以备释放
+ *         3. 将结点*p的指针域指向\$ a_i \$的直接后继结点\$ a_{i+1} \$
+ *         4. 释放结点\$ a_i \$的空间
+ *         @code{c}
+ *         Status ListDelete(LinkList &L, int i) {
+ *             p = L;
+ *             j = 0;
+ *             while ((p -> next) && (j < i - 1)) {
+ *                p = p->next;
+ *                ++j;
+ *             }
+ *             if (!(p->next) || (j > i - 1)) return ERROR;
+ *             q = p->next;
+ *             p->next = q->next;
+ *             delete q;
+ *             return OK;
+ *         }
+ *         @endcode
  *
+ *     6. 创建单链表
+ *         1. 前插法:  \n
+ *             前插法是通过将新结点逐个插入链表的头部来创建链表,每次申请一个新结点,读入相应的数据元素值,然后将新结点插入到头结点之后.
+ *
+ *         2. 后插法:  \n
+ *             后插法是通过将新结点逐个插入链表的尾部来创建链表.
+ *
+ * @subsection ch12_3_2 循环链表
+ *
+ * @subsubsection ch12_3_2_1 1. 单循环列表
+ *
+ * 将最后一个结点的指针域指向头结点,使得整个链表形成一个环,这种首尾相接的链表称为循环链表
+ *
+ * @subsubsection ch12_3_2_2 2. 双向链表
+ *
+ * 在链表的每个结点中设置两个指针,一个指向后继结点,另一个指向前驱结点
+ *
+ * @subsection ch12_3_3 顺序表和链表的比较
+ *
+ * @subsubsection ch12_3_3_1 1. 空间性能的比较
+ *
+ * 1. 存储空间的分配  \n
+ *     顺序表的空间必须预先分配,元素个数受到一定限制,易造成存储空间浪费或空间溢出现象.<u>当线性表的长度变化较大,难以预估存储规模时,宜采用链表作为存储结构</u>
+ *
+ * 2. 存储密度大小  \n
+ *     当线性表的长度变化不大,易于事先确定其大小时,为了节约存储空间,宜采用顺序表作为存储结构.
+ *
+ * @subsubsection ch12_3_3_2 2. 时间性能的比较
+ *
+ * 1. 存取元素的效率  \n
+ *     若线性表的主要操作是和元素位置紧密相关的取值操作,很少做插入或删除时,宜采用顺序表作为存储结构.
+ *
+ * 2. 插入和删除操作效率  \n
+ *     对于频繁进行插入或删除操作的线性表,宜采用链表作为存储结构
+ *
+ * @section ch12_4 线性表的应用
+ *
+ * @subsection ch12_4_1 线性表的合并
+ *
+ * 1. 分别获取LA表长m和LB表长n  \n
+ * 2. 从LB中第一个数据元素开始,循环n次执行以下操作:  \n
+ *     - 从LB中查找第i(\$ 1 \leqslant i \leqslant n \$)个数据元素赋给e
+ *     - 在LA中查找元素e,如果不存在,则将e插在表LA的最后
+ * @code{c}
+ * void MergeList(List &LA, list LB) {
+ *     m = ListLength(LA);
+ *     n = ListLength(LB);
+ *     for (i = 1; i <= n; i++) {
+ *         GetElem(LB, i, e) {
+ *             if (!LocateElem(LA, e)) ListInsert(LA, ++m, e);
+ *         }
+ *     }
+ * }
+ * @endcode
+ * 顺序表和链表的合并算法的时间复杂度都是O(m x n)
+ *
+ * @subsection ch12_4_2 有序表的合并
+ *
+ * @subsubsection ch12_4_2_1 1. 顺序有序表的合并
+ *
+ * 若线性表中的数据元素可以相互比较,并且数据元素在线性表中依值非递减或非递增有序排列,则称该线性表为有序表.
+ *
+ * 1. 创建一个表长为m+n的空表LC
+ * 2. 指针pc初始化,指向LC的第一个元素
+ * 3. 指针pa和pb初始化,分别指向LA和LB的第一个元素
+ * 4. 当指针pa和pb均未到达相应表尾时,则依次比较pa和pb所指向的元素值,从LA或LB中取元素较小的结点插入到LC的最后
+ * 5. 如果pb已到达LB表尾,依次将LA的剩余元素插入到LC的最后
+ * 6. 如果pa已到达LA表尾,依次将LB的剩余元素插入到LC的最后
+ * @code{c}
+ * void MergeList_Sq(SqList &LA, SqList LB, SqList &LC) {
+ *     LC.length = LA.length + LB.length;
+ *     LC.elem = new ElemType[LC.length];
+ *     pc = LC.elem;
+ *     pa = LA.elem;
+ *     pa_last = LA.elem + LA.length - 1;
+ *     pb_last = LB.elem + LB.length - 1;
+ *     while ((pa <= pa_last) && (pb <= pb_last)) {
+ *         if (*pa <= *pb) *pc++ = *pa++;
+ *         else *pc++ = *pb++;
+ *     }
+ *     while (pa <= pa_last) *pc++ = *pa++;
+ *     while (pb <= pb_last) *pc++ = *pb++;
+ * }
+ * @endcode
+ * 算法循环最多执行m+n次,时间复杂度为O(m+n)
+ *
+ * @subsubsection ch12_4_2_2 2. 链式有序表的合并
+ *
+ * 1. 指针pa和pb初始化,分别指向LA和LB的第一个元素
+ * 2. LC的结点取值为LA的头结点
+ * 3. 指针pc初始化,指向LC的头结点
+ * 4. 当指针pa和pb均未到达相应表尾时,则依次比较pa和pb所指向的元素值,从LA或LB中取元素较小的结点插入到LC的最后
+ * 5. 将非空表的剩余部分插入到pc所指结点的后继结点
+ * 6. 释放LB的头结点
+ * @code{c}
+ * void MergeList_L(LinkList &LA, LinkList LB, LinkList &LC) {
+ *     pa = LA->next;
+ *     pb = LB->next;
+ *     LC = LA;
+ *     pc = LC;
+ *     while (pa && pb) {
+ *         if (pa->data <= pb->data) {
+ *             pc->next = pa;
+ *             pc = pa;
+ *             pa = pa->next;
+ *         }
+ *         else {
+ *             pc->next = pb;
+ *             pc = pb;
+ *             pb = pb->next;
+ *         }
+ *     }
+ *     pc->next = pa ? pa : pb;
+ *     delete LB;
+ * }
+ * @endcode
+ * */
+
+// 第十三章
+/**
+ * @page chapter13 第十三章 栈和队列
+ *
+ * @tableofcontents
+ *
+ * @section ch13_1 栈
+ *
+ * @subsection ch13_1_1 栈的定义与特点
+ *
+ * 栈(stack)是限定仅在表尾进行插入或删除操作的线性表.因此,对栈来说,表尾端有其特殊含义,称为@b 栈顶 (top),相应地,表头端称为@b 栈底 (bottom).不含元素的栈称为空栈.
+ *
+ * <u>栈的修改是按@b 先进后出 (first-in-last-out) 的原则进行的</u>,即先进入栈的元素,最后离开栈.
+ *
+ * @subsection ch13_1_2 栈的基本操作
+ *
+ * 栈的基本运算除了有入栈和出栈外,还有栈的初始化,判空,栈顶元素的访问,栈的深度等操作.
+ *
+ * @c InitStack(&S) : 初始化操作,构造一个空栈
+ * @c StackEmpty(S) : 判断栈是否为空.若栈为空,则返回1,否则返回0
+ * @c Push(&S, x) : 入栈操作,将元素x压入栈S的顶端
+ * @c Pop(&S, &x) : 出栈操作,将栈S的顶端元素弹出,并将其值赋给x
+ * @c GetTop(S, &x) : 访问栈顶元素操作,将栈S的顶端元素的值赋给x,但不弹出
+ *
+ * @subsection ch13_1_3 顺序栈的表示和实现
+ *
+ * @subsubsection ch13_1_3_1 1. 顺序栈的表示
+ * @code{c}
+ * // ---------- 顺序栈的存储结构 ----------
+ * #define MAXSIZE 100
+ * typedef struct {
+ *     SElemType *base;  // 栈底指针
+ *     SElemType *top;   // 栈顶指针
+ *     int stacksize;    // 栈的容量
+ * } SqStack;
+ *  @endcode
+ *  base为栈底指针,初始化完成后,栈底指针base始终指向栈底的位置,若base的值为@c NULL ,则说明栈为空.
+ *  top为栈顶指针,其初值指向栈底.每当插入新的栈顶元素时,指针top加1,删除栈顶元素时,指针top减1.因此,栈空时,top和base的值相等,都指向栈底;栈非空时,top始终指向栈顶元素的上一个位置.
+ *
+ *  @subsubsection ch13_1_3_2 2. 顺序栈的初始化
+ *  1. 为顺序栈动态分配一个最大容量为MAXSIZE的数组空间,使base指向这段空间的基地址,即栈底.
+ *  2. 栈顶指针top初始化为base,表示栈空
+ *  3. stacksize置为栈的最大容量MAXSIZE
+ *  @code{c}
+ *  Status InitStack(SqStack &S) {
+ *      S.base = new SElemType[MAXSIZE];
+ *      if (!S.base) exit(OVERFLOW);
+ *      S.top = S.base;
+ *      S.stacksize = MAXSIZE;
+ *      return OK;
+ *  }
+ *  @endcode
+ *
+ *  @subsubsection ch13_1_3_3 3. 入栈
+ *
+ *  入栈操作是指在栈顶插入一个新的元素
+ *
+ *  1. 判断栈是否满,若满则返回ERROR
+ *  2. 将新元素压入栈顶,栈顶指针加1
+ *
+ *  @code{c}
+ *  Status Push(SqStack &S, SElemType x) {
+ *      if (S.top - S.base == S.stacksize) return ERROR;
+ *      *S.top++ = x;
+ *      return OK;
+ *  }
+ *  @endcode
+ *
+ * @subsubsection ch13_1_3_4 4. 出栈
+ * 此操作是将栈顶元素删除
+ * 1. 判断栈是否空,若空返回ERROR
+ * 2. 栈顶指针减1,栈顶元素出栈
+ *
+ * @code{c}
+ * Status Pop(SqStack &S, SElemType &x) {
+ *     if (S.top == S.base) return ERROR;
+ *     x = *--S.top;
+ *     return OK;
+ * }
+ * @endcode
+ *
+ * @subsubsection ch13_1_3_5 5. 取栈顶元素
+ * 当栈非空时,此操作返回当前栈顶元素的指,栈顶指针保持不变
+ * @code{c}
+ * SElemType GetTop(SqStack S) {
+ *     if (S.top != S.base) return *(S.top - 1);
+ * }
+ * @endcode
+ *
+ * @subsection ch13_1_4 链栈的表示和实现
+ *
+ * @subsubsection ch13_1_4_1 1. 链栈的定义
+ *
+ * @code{c}
+ * // ---------- 链栈的存储结构 ----------
+ * typedef struct StackNode {
+ *     ElemType data;
+ *     struct StackNode *next;
+ * } StackNode, *LinkStack;
+ * @endcode
+ *
+ * @subsubsection ch13_1_4_2 2. 链栈的初始化
+ *
+ * 链栈的初始化操作就是构造一个空栈,直接将栈顶指针置空即可
+ * @code{c}
+ * Status InitStack(LinkStack &S) {
+ *     S = NULL;
+ *     return OK;
+ * }
+ * @endcode
+ *
+ * @subsubsection ch13_1_4_3 3. 入栈
+ * 链栈入栈前不需要判断栈是否满,只需要为入栈元素动态分配一个结点空间.
+ * 1. 为入栈元素x分配空间,用指针p指向
+ * 2. 将新结点数据域置为x
+ * 3. 将新结点插入栈顶
+ * 4. 修改栈顶指针为p
+ * @code{c}
+ * Status Push(LinkStack &S, ElemType x) {
+ *     p = new StackNode;
+ *     p->data = x;
+ *     p->next = S;
+ *     S = p;
+ *     return OK;
+ * }
+ * @endcode
+ *
+ * @subsubsection ch13_1_4_4 4. 出栈
+ *
+ * 链栈出栈前需要判断栈是否空,若空则返回ERROR.
+ *
+ * 1. 判断栈是否空,若空则返回ERROR
+ * 2. 将栈顶赋值给x
+ * 3. 临时保存栈顶元素的空间,以备释放
+ * 4. 修改栈顶指针,指向新的栈顶元素
+ * 5. 释放原栈顶元素的空间
+ * @code{c}
+ * Status Pop(LinkStack &S, ElemType &x) {
+ *     if (S == NULL) return ERROR;
+ *     x = S->data;
+ *     p = S;
+ *     S = S->next;
+ *     delete p;
+ *     return OK;
+ * }
+ * @endcode
+ *
+ * @subsubsection ch13_1_4_5 5. 取栈顶元素
+ * @code{c}
+ * SElemType GetTop(LinkStack S) {
+ *     if (S != NULL) return S->data;
+ * }
+ * @endcode
+ *
+ * @section ch13_2 栈与递归
+ *
+ * @subsection ch13_2_1 采用递归算法解决问题
+ *
+ * @subsubsection ch13_2_1_1 1. 定义是递归的
+ *
+ * @$
+ * Fact(n) = \begin{cases}
+ *               1 & n = 0 \\\\
+ *               n Fact(n - 1) & n > 0
+ *           \end{cases}
+ * @$
+ *
+ * 1. 能将一个问题转变为一个新问题,而新问题与原问题的解法相同或类同,不同的仅是处理对象,并且这些处理对象更小且变化有规律.
+ * 2. 可以通过上述转化而使问题简化
+ * 3. 必须有一个明确的递归出口,或称递归边界
+ *
+ * @code{c}
+ * void p(参数表) {
+ *     if (递归边界) 可直接求解;
+ *     else p(较小的子问题);
+ * }
+ * @endcode
+ *
+ * @subsection ch13_2_2 递归算法的效率分析
+ *
+ * @subsubsection ch13_2_2_1 1. 时间复杂度分析
+ *
+ * @$
+ * T(n) = \begin{cases}
+ *            D & n = 0  \\\\
+ *            C + T(n - 1) & n > 0
+ *        \end{cases}
+ * @$  \n
+ *
+ * 设n > 2,利用上式对T(n - 1)展开,即在上式中用n - 1代替n得到:  \n
+ * @$
+ *     T(n - 1) = C + T(n - 2)
+ * @$
+ *
+ * 再代入\$ T(n) = C + T(n - 1) \$中,有:  \n
+ * @$
+ *     T(n) = 2C + T(n - 2)
+ * @$
+ *
+ * 依次类推,当n > i时有:  \n
+ * @$
+ *     T(n) = iC + T(n - i)
+ * @$
+ *
+ * 最后,当i = n时有:  \n
+ * @$
+ *     T(n) = nC + T(0) = nC + D
+ * @$
+ *
+ * 则递归算法的时间复杂度为O(n)
+ *
+ * @section ch13_3 队列
+ *
+ * @subsection ch13_3_1 队列的定义与特点
+ *
+ * 队列是另一种特殊的线性表,只在表头进行删除操作,只在表尾进行插入操作.由于<u>队列的修改是按@b 先进先出 (first-in-first-out) 的原则进行的</u>,即先进入队列的元素,最先离开队列</u>
+ *
+ * @subsection ch13_3_2 队列的基本运算
+ *
+ * 
  * */
 #endif  // CBPD_MAIN_H
