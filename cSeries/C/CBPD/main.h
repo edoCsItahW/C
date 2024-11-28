@@ -1042,6 +1042,50 @@
  *
  * @subsection ch13_3_2 队列的基本运算
  *
- * 
+ * @c InitQueue(&Q) : 初始化操作,构造一个空队列
+ * @c QueueEmpty(Q) : 判断队列是否为空.若队列为空,则返回1,否则返回0
+ * @c EnQueue(&Q, x) : 入队操作,将元素x加入队列Q的尾端
+ * @c DeQueue(&Q, &x) : 出队操作,将队列Q的头端元素弹出,并将其值赋给x
+ * @c GetHead(Q, &x) : 访问队列头端元素操作,将队列Q的头端元素的值赋给x,但不弹出
+ * @c QueueLength(Q) : 返回队列Q的长度
+ * 队列也有两种存储表示,顺序存储和链式存储.
+ *
+ * @subsection ch13_3_3 顺序队列的表示
+ *
+ * @code{c}
+ * // ---------- 顺序队列的存储结构 ----------
+ * #define MAXSIZE 100
+ * typedef struct {
+ *     QElemType *base;
+ *     int front;
+ *     int rear;
+ * } SqQueue;
+ * @endcode
+ * 初始化创建队列时,令front=rear=0,每当入队时,rear加1,每当出队时,front加1.因此,在非空队列中,头指针始终指向队列第一个元素,尾指针始终指向队列最后一个元素的下一个位置.
+ *
+ * @subsection ch13_3_4 循环队列及操作实现
+ *
+ * @subsubsection ch13_3_4_1 1. 循环队列的定义
+ *
+ * @note
+ * - 队空条件: Q.front == Q.rear
+ * - 队满条件: (Q.rear + 1) % MAXSIZE == Q.front
+ *
+ * @subsubsection ch13_3_4_2 2. 循环队列的初始化
+ * 1. 为队列分配一个最大容量为MAXSIZE的数组空间,使base指向这段空间的基地址,即队列的底部
+ * 2. 头指针和尾指针置为0,表示队列为空
+ *
+ * @code{c}
+ * Status InitQueue(SqQueue &Q) {
+ *     Q.base = new QElemType[MAXSIZE];
+ *     if (!Q.base) exit(OVERFLOW);
+ *     Q.front = Q.rear = 0;
+ *     return OK;
+ * }
+ * @endcode
+ *
+ * @subsubsection ch13_3_4_3 3. 求队列长度
+ *
+ *
  * */
 #endif  // CBPD_MAIN_H

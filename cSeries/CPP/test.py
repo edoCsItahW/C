@@ -6,6 +6,7 @@
 #  permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 from math import floor
+from ast import parse
 
 
 def gcd(a, b):
@@ -26,3 +27,20 @@ def d2f(dec):
 
 
 print(d2f(0.2))
+
+from warnings import warn
+
+# warn(1)
+
+from ast import NodeVisitor, AST
+
+
+class MyVisitor(NodeVisitor):
+    def visit_Add(self, node: AST):
+        return
+
+
+with open(__file__, 'r', encoding='utf-8') as file:
+    ast = parse(file.read())
+    visitor = MyVisitor()
+    visitor.visit(ast)
